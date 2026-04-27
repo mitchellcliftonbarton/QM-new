@@ -79,6 +79,12 @@ if ($post_type == 'exhibition') {
 
 	$context['sublinks'] = $sublinks;
 } else if ($post_type == 'staff-member') {
+	if (get_field('disable_detail', $timber_post->ID)) {
+		$cat = $timber_post->terms('staff-categories')[0]->slug ?? 'board';
+		wp_redirect('/board-staff/' . $cat, 301);
+		exit;
+	}
+
 	$context['site_theme'] = 'purple-theme';
 
 	$sublinks = [

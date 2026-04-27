@@ -18,14 +18,20 @@
         {% if posts|length > 0 %}
           {% for item in posts %}
             {% set pronouns = item.get_field('pronouns') %}
+            {% set disable_detail = item.get_field('disable_detail') %}
 
-            <a 
-              href="{{ item.link }}" 
-              class="svg-group def-x grid grid-cols-12 gap-def py-def-1.5 lg:hover:underline"
-              aria-label="Go to page for staff member {{ item.title }}"
-            >
+            {% if disable_detail %}
+              <div class="svg-group def-x grid grid-cols-12 gap-def py-def-1.5">
+            {% else %}
+              <a
+                href="{{ item.link }}"
+                class="svg-group def-x grid grid-cols-12 gap-def py-def-1.5 lg:hover:underline"
+                aria-label="Go to page for staff member {{ item.title }}"
+              >
+            {% endif %}
+
               <div class="col-span-4 lg:col-span-2">
-                {% 
+                {%
                   include 'partial/image-sizer.twig' with {
                     'image': Image(item.get_field('main_image')),
                     'ratioPaddingVal': 75
@@ -42,7 +48,12 @@
                   {% endif %}
                 </div>
               </div>
-            </a>
+
+            {% if disable_detail %}
+              </div>
+            {% else %}
+              </a>
+            {% endif %}
           {% endfor %}
         {% else %}
           <section 

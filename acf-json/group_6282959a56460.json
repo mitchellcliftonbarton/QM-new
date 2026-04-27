@@ -103,6 +103,25 @@
             "delay": 0
         },
         {
+            "key": "field_disable_detail_page",
+            "label": "Disable Detail Page",
+            "name": "disable_detail",
+            "type": "true_false",
+            "instructions": "Check this to prevent this person from having their own detail page. They will still appear in the listing.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
             "key": "field_62b4dabcbe3e9",
             "label": "Order Indicator",
             "name": "order_indicator",
