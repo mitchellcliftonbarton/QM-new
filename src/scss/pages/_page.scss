@@ -1,0 +1,24 @@
+.category-videos {
+  a {
+    .play-video {
+      svg {
+        height: 30px;
+      }
+    }
+
+    &:hover {
+      p {
+        text-decoration: underline;
+        text-decoration-color: white;
+      }
+    }
+  }
+}
+
+.featured-video {
+  .play-video {
+    svg {
+      height: 30px;
+    }
+  }
+}

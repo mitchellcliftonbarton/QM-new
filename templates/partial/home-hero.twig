@@ -1,0 +1,107 @@
+{% set hero_image = post.get_field('hero').image %}
+{% set hero_video = post.get_field('hero').video %}
+
+<section 
+  aria-label="Home page Hero section."
+  class="hero hero-home h-screen-minus-nav flex justify-center items-center bg-light-grey relative{% if post.get_field('hero').overlay_opacity %} overlay-{{ post.get_field('hero').overlay_opacity }}{% endif %}{% if hero_video %} has-vid{% endif %}"
+>
+  <div class="absolute bg top-0 left-0 w-full h-full">
+    {% if hero_video %}
+      <video 
+        class="vid lazy-load object-cover object-center w-full h-full"
+        data-vid-src="{{ hero_video.url }}"
+        muted
+        loop
+        playsinline
+        preload
+        {% if hero_image %}
+        poster="{{ Image(hero_image).src }}"
+        {% endif %}
+      >
+        {% if hero_video.description %}
+          <span>{{ hero_video.description }}</span>
+        {% endif %}
+      </video>
+    {% elseif hero_image %}
+      <img 
+        class="lazy-load object-cover object-center w-full h-full"
+        data-img="{{ Image(hero_image).src }}" 
+        alt="{{ Image(hero_image).alt }}"
+      >
+    {% endif %}
+
+    <div class="overlay absolute top-0 left-0 w-full h-full"></div>
+  </div>
+
+  <div class="loader absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none">
+    <p class="forma-h1 text-white">Loading...</p>
+  </div>
+
+  <div class="hero-content z-10 h-full flex flex-col items-center">
+    <div class="spacer"></div>
+
+    <div class="flex-0-0 py-20 lg:py-40">
+      {% include 'partial/clock.twig' %}
+
+      {% set openText = 'We are currently open.<br>Discover what’s on at the Museum below.' %}
+      {% set closedText = 'We are currently closed.<br>Discover what’s on at the Museum below.' %}
+
+      {% if post.get_field('hero').closed_text %}
+        {% set closedText = post.get_field('hero').closed_text | nl2br %}
+      {% endif %}
+
+      {% if post.get_field('hero').open_text %}
+        {% set openText = post.get_field('hero').open_text | nl2br %}
+      {% endif %}
+
+      <div 
+        class="forma-h1 text-white text-center px-12 mt-12" 
+        aria-live="polite"
+      >It's <span id="time-weather"></span><br><p id="open-text" class="inline" aria-hidden>{{ openText }}</p><p id="close-text" class="inline" aria-hidden>{{ closedText }}</p></div>
+    </div>
+
+    <div class="spacer spacer-line relative w-full">
+      <div class="w-full pb-12">
+        {% if post.get_field('hero').audio_guide_link %}
+          <a 
+            href="{{ post.get_field('hero').audio_guide_link.url }}" 
+            class="def-button w-11/12 lg:w-1/2 neon mx-auto mb-def-1/2"
+            aria-label="Go to visit page."
+            target="{{ post.get_field('hero').audio_guide_link.target }}"
+          >{{ post.get_field('hero').audio_guide_link.title }}</a>
+        {% endif %}
+
+        <div aria-hidden class="lg:hidden relative translator-mobile w-11/12 mx-auto">
+          {{ function('do_shortcode', '[gtranslate]') }}
+
+          {% include 'partial/svg/caret-down.twig' %}
+        </div>
+      </div>
+
+      <div class="line"></div>
+    </div>
+  </div>
+
+  {% if hero_video %}
+    <div class="absolute top-def left-def z-10 flex">
+      <button 
+        class="video-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative mr-5"
+        aria-label="Play hero video."
+        data-labelfinish="hero video."
+      >
+        {% include 'partial/svg/play.twig' %}
+        {% include 'partial/svg/pause.twig' %}
+      </button>
+
+      <button 
+        class="sound-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative"
+        aria-label="Toggle sound button for hero video."
+        aria-pressed="false"
+        tabindex="-1"
+      >
+        {% include 'partial/svg/audio.twig' %}
+        {% include 'partial/svg/muted.twig' %}
+      </button>
+    </div>
+  {% endif %}
+</section>

@@ -1,0 +1,20 @@
+{% set section = fields %}
+
+{% set theme = 'neon' %}
+
+{% if site_theme == 'brown-theme' %}
+  {% set theme = 'brown' %}
+{% endif %}
+
+<section
+  class="svg-group def-x-big lg:def-x-half py-20 flex justify-center flex-wrap"
+  aria-label="Links section"
+>
+  {% 
+    include 'partial/links.twig' with {
+      'links': section.links,
+      'color': theme,
+      'classes': 'mt-20 clear-both'
+    }
+  %}
+</section>

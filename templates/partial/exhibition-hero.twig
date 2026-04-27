@@ -1,0 +1,69 @@
+{% set hero_image = post.get_field('hero').image %}
+{% set hero_video = post.get_field('hero').video %}
+{% set hero_poster = post.get_field('hero').poster %}
+
+<section 
+  aria-label="Exhibition Hero section."
+  class="hero hero-exhibition h-screen-minus-nav flex justify-center items-center bg-light-grey relative overflow-hidden has-vid{% if post.get_field('hero').overlay_opacity %} overlay-{{ post.get_field('hero').overlay_opacity }}{% endif %}"
+>
+  <div class="absolute bg top-0 left-0 w-full h-full">
+    <video 
+      tabindex="-1"
+      class="vid lazy-load object-cover object-center w-full h-full"
+      data-vid-src="{{ hero_video.url }}"
+      poster="{% if hero_poster %}{{ Image(hero_poster).src }}{% endif %}"
+    ></video>
+
+    <div class="overlay absolute top-0 left-0 w-full h-full"></div>
+  </div>
+
+  <div class="absolute top-def-2.5 left-def-2 z-50 flex">
+    <button 
+      class="video-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative mr-5"
+      aria-label="Play hero video."
+      data-labelfinish="hero video."
+    >
+      {% include 'partial/svg/play.twig' %}
+      {% include 'partial/svg/pause.twig' %}
+    </button>
+
+    <button 
+      class="sound-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative"
+      aria-label="Toggle sound button for hero video."
+      aria-pressed="false"
+      tabindex="-1"
+    >
+      {% include 'partial/svg/audio.twig' %}
+      {% include 'partial/svg/muted.twig' %}
+    </button>
+  </div>
+
+  <div class="hero-content z-10 w-full h-full def-x py-def-1.5">
+    <div class="exhibition-svg-section w-full h-full flex flex-col items-center">
+      <div class="svg-wrapper"></div>
+
+      <div class="spacer svg-group relative w-full p-def-1.5 pointer-events-none"></div>
+
+      <div class="svg-group flex-0-0 p-def-1.5 w-full">
+        <h1 class="forma-h1 text-white text-center">{% if post.get_field('artist_title') %}{{ post.get_field('artist_title') }}<br>{% endif %}{{ post.title }}</h1>
+        {% if type == 'Default' %}
+          <h2 class="text-center forma-h1">{{ post.starting_date_new|date('m.d.y') }} – {{ post.ending_date_new|date('m.d.y') }}</h2>
+        {% elseif type == 'Ongoing' %}
+          <h2 class="text-center forma-h1">{{ post.starting_date_new|date('m.d.y') }} – Ongoing</h2>
+        {% elseif type == 'On Long Term View' %}
+          <h2 class="text-center forma-h1">On Long-Term View</h2>
+        {% endif %}
+      </div>
+
+      <div class="spacer svg-group flex justify-center items-end w-full p-def-1.5">
+        {% if post.get_field('tickets_link') %}
+          <a 
+            href="{{ post.get_field('tickets_link').url }}" 
+            class="def-button w-full lg:w-1/3 green untab-onplay"
+            aria-label="Book tickets for {{ post.title }}."
+          >Book Tickets</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

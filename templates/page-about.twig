@@ -1,0 +1,128 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap about push-nav">
+    <h1 class="wcag-hidden">About</h1>
+
+    <!-- HERO SECTION -->
+    {% 
+      include 'partial/default-hero.twig' with {
+        'title': post.get_field('headline')
+      }
+    %}
+
+    <div class="def-x pb-20">
+      <div class="svg-section start-center">
+        <div class="svg-wrapper"></div>
+
+        {% if post.get_field('sections')|length > 0 %}
+          {% for section in post.get_field('sections') %}
+            <section 
+              id="{{ section.slug|lower|replace({' ': '-'}) }}" 
+              class="svg-group scroll-to-section self-clear"
+              aria-label="{{ section.title }} section."
+            >
+              <div class="def-x {% if loop.first %}pt-40{% else %}pt-20{% endif %}">
+                {% if section.title %}
+                  <h2 class="forma-h2 text-center mb-20">{{ section.title }}</h2>
+                {% endif %}
+
+                {% if section.images %}
+                  {% if section.images|length > 1 %}
+                    <div class="max-default mx-auto mb-20">
+                      <div class="mini-slider relative overflow-hidden mb-def-1/2" data-caption-el="caption-{{ section.slug|lower|replace({' ': '-'}) }}">
+                        <div class="swiper absolute top-0 left-0 w-full h-full">
+                          <div class="swiper-wrapper">
+                            {% for image in section.images %}
+                              <div class="swiper-slide" data-caption="{{ image.caption }}">
+                                <img 
+                                  class="object-cover object-center w-full h-full" 
+                                  src="{{ Image(image).src }}" 
+                                  alt="{{ Image(image).alt }}"
+                                >
+                              </div>
+                            {% endfor %}
+                          </div>
+
+                          <div class="swiper-pagination"></div>
+                        </div>
+                      </div>
+
+                      {% if section.images[0].caption %}
+                        <p class="caption-{{ section.slug|lower|replace({' ': '-'}) }} forma-caption">{{ section.images[0].caption }}</p>
+                      {% else %}
+                        <p 
+                          class="caption-{{ section.slug|lower|replace({' ': '-'}) }} forma-caption" 
+                          style="opacity: 0; pointer-events: none;"
+                        >---</p>
+                      {% endif %}
+                    </div>
+                  {% else %}
+                    <div class="mb-20">
+                      {% 
+                        include 'partial/image-sizer.twig' with {
+                          'classes': 'mb-def-1/2',
+                          'image': Image(section.images[0]),
+                          'loadBgClass': 'bg-grey'
+                        }
+                      %}
+
+                      {% if section.images[0].caption %}
+                        <p class="forma-caption">{{ section.images[0].caption }}</p>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                {% endif %}
+
+                {% if section.description %}
+                  <div class="description forma-body rich-text spaced mb-20 max-default mx-auto">{{ section.description }}</div>
+                {% endif %}
+
+                {% if section.block_links %}
+                  <div class="grid grid-cols-6 gap-def-1/2 lg:gap-def mb-20">
+                    {% for item in section.block_links %}
+                      <a 
+                        href="{{ item.link.url }}" 
+                        class="color-block purple rounded-2xl col-span-3 lg:col-span-1"
+                        aria-label="Go to {{ item.link.title }} page."
+                      >
+                        <div class="inner relative">
+                          <div class="absolute top-0 left-0 w-full h-full p-def flex justify-center items-center">
+                            <p class="forma-body text-center lg:hidden" aria-hidden>{{ item.link.title|trunc(25) }}</p>
+                            <p class="forma-body text-center hidden lg:block" aria-hidden>{{ item.link.title|trunc(50) }}</p>
+                            <p class="wcag-hidden">{{ item.link.title }}</p>
+                          </div>
+                        </div>
+                      </a>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if section.columns_section.columns|length > 0 %}
+                  <div class="grid grid-cols-3 gap-def mb-20">
+                    {% for column in section.columns_section.columns %}
+                      <div class="col-span-3 lg:col-span-1 mb-16 lg:mb-0">
+                        <h3 class="forma-body">{{ column.title }}</h3>
+                        <div class="forma-body">{{ column.text }}</div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if section.links %}
+                  {% 
+                    include 'partial/links.twig' with {
+                      'links': section.links,
+                      'color': 'purple',
+                      'classes': 'mb-20'
+                    }
+                  %}
+                {% endif %}
+              </div>
+            </section>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

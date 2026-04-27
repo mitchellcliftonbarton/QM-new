@@ -1,0 +1,389 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  {% set heroImageIsDuplicate = false %}
+  {% set hero_type = post.get_field('hero').hero_type %}
+
+  {% if Image(post.get_field('hero').image).src == Image(post.get_field('main_image')).src %}
+    {% set heroImageIsDuplicate = true %}
+  {% endif %}
+
+  {% set isAmbient = hero_type == 'Ambient Video' and post.get_field('hero').video %}
+  {% set hasImageFile = post.get_field('hero').image or post.get_field('main_image') %}
+  {% set isImage = hero_type == 'Image' and hasImageFile %}
+
+  {% set narrative_video = post.get_field('hero').narrative_video %}
+  {% set has_narrative_video = narrative_video.youtube_id or narrative_video.file %}
+  {% set isNarrative = hero_type == 'Narrative Video' and has_narrative_video %}
+  {% set type = post.get_field('exhibition_type') %}
+
+	<div class="page-wrap single-exhibition push-nav" data-breadcrumb="true">
+    <h1 class="wcag-hidden">Exhibitions - {{ post.title }}</h1>
+    
+    {% if isAmbient %}
+      <!-- HERO SECTION -->
+      {% include 'partial/exhibition-hero.twig' %}
+    {% endif %}
+
+    <div class="def-x {% if isAmbient %}pb-20{% else %}py-20{% endif %}">
+      <div class="svg-section {% if isAmbient %}svg-exhibition{% endif %}">
+        <div class="svg-wrapper"></div>
+
+        {% if isImage or isNarrative %}
+          <section 
+            class="svg-group py-20 def-x"
+            aria-label="Title section"
+          >
+            <h1 class="forma-h1 text-black text-center">{% if post.get_field('artist_title') %}{{ post.get_field('artist_title') }}<br>{% endif %}{{ post.title }}</h1>
+            {% if type == 'Default' %}
+              <p class="text-center forma-h1">{{ post.starting_date_new|date('m.d.y') }} – {{ post.ending_date_new|date('m.d.y') }}</p>
+            {% elseif type == 'Ongoing' %}
+              <p class="text-center forma-h1">{{ post.starting_date_new|date('m.d.y') }} – Ongoing</p>
+            {% elseif type == 'On Long Term View' %}
+              <p class="text-center forma-h1">On Long-Term View</p>
+            {% endif %}
+
+            {% if post.get_field('subtitle') %}
+              <p class="forma-h2 text-center my-12">{{ post.get_field('subtitle') }}</p>
+            {% endif %}
+          </section>
+        {% endif %}
+
+        <section 
+          class="intro-content svg-group py-20 def-x"
+          aria-label="Intro section of {{ post.title }}."
+        >
+          {% if hero_type == 'Image' and hasImageFile %}
+            <div class="mb-16 max-default mx-auto">
+              {% set image = post.get_field('main_image') %}
+
+              {% if post.get_field('hero').image %}
+                {% set image = post.get_field('hero').image %}
+              {% endif %}
+
+              {% 
+                include 'partial/image-sizer.twig' with {
+                  'classes': 'mb-def-1/2',
+                  'image': Image(image),
+                  'loadBgClass': 'bg-grey'
+                }
+              %}
+
+              {% if image.caption %}
+                <p class="forma-caption">{{ image.caption }}</p>
+              {% endif %}
+            </div>
+          {% elseif isNarrative %}
+            {% if narrative_video.youtube_id %}
+              <div class="default-video mb-16 max-default mx-auto" data-yt-id="{{ narrative_video.youtube_id }}">
+                <div class="sizer relative w-full">
+                  <div class="inner absolute top-0 left-0 w-full h-full"></div>
+
+                  {% if post.get_field('hero').poster %}
+                    <div class="overlay absolute top-0 left-0 w-full h-full z-10 flex justify-center items-center">
+                      <img class="object-center object-cover w-full h-full" src="{{ Image(post.get_field('hero').poster).src }}" alt="{{ post.get_field('hero').poster.alt }}">
+
+                      <button 
+                        class="play-video flex justify-center items-center rounded-xl w-24 h-24 forma-body absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        aria-label="Play video."
+                      >
+                        {% include 'partial/svg/play.twig' %}
+                      </button>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% elseif narrative_video.file %}
+              <div class="default-video mb-16 max-default mx-auto">
+                <div class="sizer relative w-full">
+                  <video tabindex="-1" aria-hidden="true" src="{{ narrative_video.file.url }}" controls preload></video>
+
+                  {% if post.get_field('hero').poster %}
+                    <div class="overlay absolute top-0 left-0 w-full h-full z-10 flex justify-center items-center">
+                      <img class="object-center object-cover w-full h-full" src="{{ Image(post.get_field('hero').poster).src }}" alt="{{ post.get_field('hero').poster.alt }}">
+
+                      <button 
+                        class="play-video flex justify-center items-center rounded-xl w-24 h-24 forma-body absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        aria-label="Play video."
+                      >
+                        {% include 'partial/svg/play.twig' %}
+                      </button>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+
+          {% if post.get_field('can_add_to_calendar') or post.get_field('audio_tour_link') %}
+            <div class="flex flex-wrap justify-center clear-both mb-20 max-default mx-auto">
+              {% if post.get_field('can_add_to_calendar') %}
+                <div class="w-full lg:w-1/2 lg:px-def-1/2">
+                  <div 
+                    class="dropdown green"
+                    aria-expanded="false"
+                    aria-controls="add-to-cal"
+                  >
+                    <button
+                      class="def-button clicker w-full relative flex justify-center items-center"
+                      aria-label="Open dropdown to see options to add {{ post.title }} to your calendar."
+                      aria-live="polite"
+                    >
+                      <span>Add to Cal</span>
+
+                      {% include 'partial/svg/caret-down.twig' %}
+                    </button>
+
+                    <div 
+                      id="add-to-cal"
+                      class="content px-def"
+                    >
+                      <div class="content-inner flex flex-col items-center pb-def-1/2">
+                        <form 
+                          class="ics-download w-full" 
+                          method="post" 
+                          action="{{ function('admin_url', 'admin-ajax.php') }}"
+                          aria-label="Form to download an .ICS file for {{ post.title }}."
+                        >
+                          <input name="action" value="download_ics" type="hidden">
+                          <input type="hidden" name="id" value="{{ post.id }}">
+                          <button
+                            type="submit"
+                            class="dropdown-item forma-body w-full text-center pb-def-1/2"
+                            aria-label="Download an .ICS file for {{ post.title }}."
+                          >Add to iCal</button>
+                        </form>
+
+                        {% for item in post.get_field('calendar_links') %}
+                          <a 
+                            href="{{ item.link.url }}"
+                            class="dropdown-item forma-body w-full text-center pb-def-1/2"
+                            aria-label="Go to {{ link.link.title }} to add to calendar for {{ item.title }}."
+                          >{{ item.link.title }}</a>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if post.get_field('audio_tour_link') %}
+                <div class="w-full lg:w-1/2 lg:px-def-1/2">
+                  {% 
+                    include 'partial/def-button.twig' with {
+                      'href': post.get_field('audio_tour_link').url,
+                      'label': "Go to audio tour link for" ~ post.title,
+                      'title': 'Audio Tour',
+                      'classes': 'green'
+                    }
+                  %}
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if post.get_field('description') %}
+            <div class="description forma-body rich-text spaced mb-16 max-default mx-auto">{{ post.get_field('description') }}</div>
+          {% endif %}
+
+          {% if post.get_field('press_release') %}
+            <div class="flex justify-center">
+              <a 
+                href="{{ post.get_field('press_release').url }}" 
+                download 
+                class="def-button green w-full lg:w-1/2"
+                aria-label="Download press release for {{ post.title }}"
+              >Download Press Release</a>
+            </div>
+          {% endif %}
+        </section>
+
+        {% if post.get_field('images')|length > 0 %}
+          <section 
+            class="image-gallery svg-group py-20 def-x"
+            aria-label="Exhibition images section"
+          >
+            <h2 class="forma-h2 text-center mb-20">Discover Images of the Exhibition</h2>
+
+            <div class="grid grid-cols-6 gap-def-1/2 lg:gap-def items-start">
+              {% for image in post.get_field('images') %}
+                <button 
+                  class="image relative col-span-3 lg:col-span-1" 
+                  data-index="{{ loop.index0 }}"
+                  aria-label="Open image carousel for {{ post.title }} to index number {{ loop.index }}"
+                >
+                  {% 
+                    include 'partial/image-sizer.twig' with {
+                      'classes': 'col-span-3 lg:col-span-1 mb-def',
+                      'image': Image(image),
+                      'loadBgClass': 'bg-grey'
+                    }
+                  %}
+
+                  {% include 'partial/svg/plus.twig' %}
+                </button>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('images')|length > 0 %}
+          <!-- CAROUSEL OVERLAY -->
+          <section 
+            id="image-gallery-carousel" 
+            class="fixed top-0 left-0 w-full h-full py-def def-x bg-forest-green flex flex-col"
+            aria-label="Exhibition images carousel"
+            aria-expanded="false"
+            aria-hidden="true"
+            data-no-slide="{% if post.get_field('images')|length > 1 %}false{% else %}true{% endif %}"
+          >
+            <div class="top flex-0-0 flex justify-center items-center relative pb-def">
+              <p class="forma-body absolute left-0"><span id="current-index" aria-live="polite">1</span> of {{ post.get_field('images')|length }}</p>
+              
+              <div class="buttons flex">
+                {% if post.get_field('images')|length > 1 %}
+                  <button 
+                    id="prev" 
+                    class="forma-body mx-4 relative"
+                    tabindex="-1"
+                    aria-label="View previous image in carousel."
+                  >Prev</button>
+                  <button 
+                    id="next" 
+                    class="forma-body mx-4 relative"
+                    tabindex="-1"
+                    aria-label="View next image in carousel."
+                  >Next</button>
+                {% else %}
+                  <p class="forma-body opacity-0 pointer-events none">Hidden text</p>
+                {% endif %}
+              </div>
+
+              <button 
+                id="image-gallery-carousel-close" 
+                class="absolute right-0"
+                tabindex="-1"
+                aria-label="Close large carousel"
+              >
+                {% include 'partial/svg/x.twig' %}
+              </button>
+            </div>
+
+            <div class="swiper-container carousel h-full w-full">
+              <div class="swiper-wrapper">
+                {% for image in post.get_field('images') %}
+                  <div 
+                    class="swiper-slide flex flex-col items-center justify-center h-full w-full" 
+                    aria-hidden="true"
+                    {% if Image(image).caption %}data-caption="{{ Image(image).caption }}"{% endif %}
+                  >
+                    <div class="h-full w-full">
+                      <div class="h-full w-full relative">
+                        <div class="w-full h-full absolute top-0 left-0 w-full h-full">
+                          <img 
+                            class="object-contain object-center w-full h-full"
+                            src="{{ Image(image).src }}" 
+                            alt="{{ Image(image).alt }}"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    {% if Image(image).caption %}
+                      <div class="w-full py-def-1/2 max-default">
+                        <p class="forma-body text-left">{{ Image(image).caption }}</p>
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('artists') %}
+          <section 
+            class="artists svg-group py-20 def-x"
+            aria-label="Artists section."
+          >
+            <h2 class="forma-h2 text-center mb-20">Participating Artists</h2>
+
+            <div class="artist-list">
+              {% for artist in post.get_field('artists') %}
+                {% if artist.link %}
+                  <a 
+                    href="{{ artist.link.url }}" 
+                    class="forma-body inline-block"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Go to {{ artist.link.url }}."
+                  >— {{ artist.first_name }} {{ artist.last_name }}</a>
+                {% else %}
+                  <p class="forma-body">— {{ artist.first_name }} {{ artist.last_name }}</p>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('additional_links_title') and post.get_field('additional_links') %}
+          <section 
+            class="links svg-group py-20 def-x"
+            aria-label="Additional links section."
+          >
+            <h2 class="forma-h2 text-center mb-20">{{ post.get_field('additional_links_title') }}</h2>
+
+            <div class="links-list">
+              {% for link in post.get_field('additional_links') %}
+                <p>
+                  <a 
+                    href="{{ link.link.url }}" 
+                    class="forma-body inline-block lg:hover:underline"
+                    target="{{ link.link.target }}"
+                    rel="noreferrer"
+                    aria-label="Go to {{ link.link.title }}."
+                  >— {{ link.link.title }}</a>
+                </p>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('sponsors').images or post.get_field('sponsors').text %}
+          <section 
+            class="sponsors svg-group py-20 def-x"
+            aria-label="Sponsors section."
+          >
+            <h2 class="forma-h2 text-center mb-20">Supporters</h2>
+
+            <div class="forma-body mb-20 max-default mx-auto rich-text spaced">{{ post.get_field('sponsors').text }}</div>
+
+            <div class="grid grid-cols-6 gap-def-1/2 lg:gap-def">
+              {% for item in post.get_field('sponsors').images %}
+                <div class="sponsor-image bg-light-grey rounded-lg overflow-hidden col-span-3 lg:col-span-1">
+                  <div class="inner relative">
+                    <div class="absolute top-0 left-0 w-full h-full p-def">
+                      <img 
+                        class="object-contain object-center w-full h-full" 
+                        src="{{ Image(item).src }}" 
+                        alt="{{ Image(item).alt }}"
+                      >
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+        
+        {% if post.get_field('related_links') %}
+          {% 
+            include 'partial/related-items.twig' with {
+              'items': post.get_field('related_links'),
+              'color': 'green'
+            }
+          %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

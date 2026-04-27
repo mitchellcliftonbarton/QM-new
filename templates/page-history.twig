@@ -1,0 +1,114 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap history">
+    <h1 class="wcag-hidden">History</h1>
+
+    <div class="history-hero h-screen relative w-full overflow-hidden flex flex-col">
+      <div class="highlight-images absolute top-0 left-0 h-full w-full overflow-hidden">
+        <div class="w-full h-full inner flex">
+          {% for section in post.get_field('year_highlights') %}
+            <div class="w-full h-full">
+              <img 
+                class="lazy-load object-cover object-center w-full h-full" 
+                data-img="{{ Image(section.image).src }}" 
+                alt="{{ Image(section.image).alt }}"
+              >
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="overlay absolute top-0 left-0 w-full h-full pointer-events-none"></div>
+      </div>
+
+      <nav class="highlight-links w-full flex p-def z-10 flex-0-0" role="navigation">
+        <ul class="flex w-full">
+          {% for section in post.get_field('year_highlights') %}
+            <li>
+              <button 
+                class="highlight-link cursor-pointer text-left opacity-0 lg:opacity-100 pointer-events-none lg:pointer-events-auto" 
+                data-title="link-{{ section.year_title }}"
+                aria-label="Jump to {{ section.year_title }} section."
+                aria-current="{% if loop.first %}true{% else %}false{% endif %}"
+              >
+                <p class="forma-h1 text-white">{{ section.year_title }}</p>
+              </button>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <div class="h-full flex-1 relative">
+        {% for section in post.get_field('year_highlights') %}
+          <div class="highlight-text absolute top-0 left-0 w-full h-full flex flex-col lg:flex-row justify-start lg:justify-center items-center pt-28 lg:pt-0 pb-def lg:pb-0 {% if loop.first %} active{% endif %}">
+            <h2 class="forma-h1 text-center text-white relative z-10 w-11/12 lg:w-3/4">
+              <span class="lg:hidden">{{ section.year_title }}</span><br class="lg:hidden">
+              <span>{{ section.text_title }}</span>
+            </h2>
+
+            {% if section.description %}
+              <div class="text relative lg:absolute bottom-0 left-0 p-def forma-body text-white">
+                {{ section.description }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <div class="svg-history absolute top-0 left-0 w-full h-full def-x">
+          <div id="history-svg" class="relative w-full h-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="def-x pb-20">
+      <div class="svg-section svg-exhibition">
+        <div class="svg-wrapper"></div>
+
+        {% for section in post.get_field('text_sections') %}
+          <section
+            class="svg-group px-def-1/2 lg:def-x-half py-20 self-clear"
+          >
+            {% if section.image %}
+              <div class="mb-16 w-full lg:w-7/12 mx-auto">
+                {% 
+                  include 'partial/image-sizer.twig' with {
+                    'classes': 'mb-def-1/2',
+                    'image': Image(section.image),
+                    'loadBgClass': 'bg-grey'
+                  }
+                %}
+
+                {% if section.image.caption %}
+                  <p class="forma-caption">{{ section.image.caption }}</p>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if section.text %}
+              <div class="description forma-body rich-text mb-16 max-default mx-auto">{{ section.text }}</div>
+            {% endif %}
+
+            {% if section.links %}
+              {% 
+                include 'partial/links.twig' with {
+                  'links': section.links,
+                  'color': 'purple',
+                  'classes': 'mb-16'
+                }
+              %}
+            {% endif %}
+          </section>
+        {% endfor %}
+
+        {% if post.get_field('related_links') %}
+          {% 
+            include 'partial/related-items.twig' with {
+              'items': post.get_field('related_links'),
+              'color' : 'purple'
+            }
+          %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

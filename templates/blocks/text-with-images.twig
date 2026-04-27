@@ -1,0 +1,25 @@
+{% set section = fields %}
+
+<section
+  class="def-x-half"
+  aria-label="Image with text section"
+>
+  <div>
+    <div class="float-left w-1/2 mb-def pr-def">
+      {% 
+        include 'partial/image-sizer.twig' with {
+          'image': Image(section.image),
+          'loadBgClass': 'bg-grey'
+        }
+      %}
+
+      {% if section.image.caption %}
+        <p class="forma-caption">{{ section.image.caption }}</p>
+      {% endif %}
+    </div>
+
+    {% if section.text %}
+      <div class="description forma-body rich-text mb-16">{{ section.text }}</div>
+    {% endif %}
+  </div>
+</section>

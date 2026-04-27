@@ -1,0 +1,46 @@
+{% block html_head_container %}
+	{% include 'html-header.twig' %}
+{% endblock %}
+	<body 
+		data-template="base.twig" 
+		class="slug-{{ post.slug }} type-{{ post.type }} {% if site_theme %}{{ site_theme }}{% else %}green-theme{% endif %} {% if site_bg %}{{ site_bg }}{% endif %} mobile-sublinks-open"
+		data-open-hour="{{ open_time }}"
+		data-close-hour="{{ close_time }}"
+	>
+		{% include 'partial/nav.twig' %}
+
+		<main role="main">
+			{% block content %}
+				Sorry, no content
+			{% endblock %}
+		</main>
+
+		{% include 'partial/footer.twig' %}
+		{% include 'partial/mobile-menu.twig' %}
+
+		{% set randomColor = random(['pink', 'brown', 'grey', 'purple', 'forest-green', 'neon-green']) %}
+		
+
+		{% if options.artist_intervention.screensaver.image or options.artist_intervention.screensaver.video %}
+			{% 
+				include 'partial/screensaver.twig' with {
+					'bg': randomColor
+				}
+			%}
+		{% endif %}
+
+		{% set showFlyout = options.artist_intervention.flyout.image or options.artist_intervention.flyout.video %}
+
+		{% if post.slug == 'home' and showFlyout %}
+			{% 
+				include 'partial/flyout.twig' with {
+					'bg': randomColor
+				}
+			%}
+		{% endif %}
+
+		<p aria-hidden class="wcag-hidden observe-svg observe-delay">Language detector for SVG</p>
+	</body>
+	
+	{{function("wp_footer")}}
+</html>

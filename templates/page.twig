@@ -1,0 +1,23 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap {{ post.slug }} push-nav" {% if should_breadcrumb == 1 %}data-breadcrumb="true"{% endif %}>
+    <h1 class="wcag-hidden">{{ post.title }}</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        <section
+          class="svg-group def-x-big lg:def-x-half py-20"
+          aria-label="Title section for {{ post.title }}"
+        >
+          <h1 class="forma-h1 text-center">{{ post.title }}</h1>
+        </section>
+        
+        {{ post.content }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,69 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap archive push-nav">
+    <h1 class="wcag-hidden">{{ term }} Archive - Page {{ paged }}</h1>
+    
+    <div class="flex justify-start pt-12 lg:pt-16 def-x">
+      {% set totalOnPage = 20 %}
+      {% set page = paged %}
+
+      {% if paged > 0 %}
+        {% set page = paged - 1 %}
+      {% endif %}
+
+      {% set minOffset =  totalOnPage * page + 1 %}
+      {% set amountToAdd = totalOnPage - 1 %}
+      {% set maxOffset = minOffset + amountToAdd %}
+
+      {% if maxOffset > posts.found_posts %}
+        {% set maxOffset = posts.found_posts %}
+      {% endif %}
+
+      <a 
+        href="#" 
+        class="back-link {{ button_theme }} flex items-center p-3 forma-body rounded-xl"
+        data-string-check="{{ archive_slug }}"
+        aria-label="Go back. {{ minOffset }}-{{ maxOffset}} of {{ posts.found_posts }}{% if term %} for “{{ term }}”{% endif %}{% if term_title %} - {{ term_title }}{% endif %}."
+      >
+        <span class="mr-4">{{ minOffset }}-{{ maxOffset}} of {{ posts.found_posts }}{% if term %} for “{{ term }}”{% endif %}{% if term_title %} - {{ term_title }}{% endif %}</span>
+        {% include 'partial/svg/x.twig' %}
+      </a>
+    </div>
+
+    <div class="def-x py-20">
+      <div class="svg-section mb-20">
+        <div class="svg-wrapper"></div>
+
+        {% if posts|length > 0 %}
+          {% for item in posts %}
+            {% 
+              include 'partial/archive-post-item.twig' with { 
+                'item': item,
+                'button_theme': button_theme
+              } 
+            %}
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {% if posts.pagination.pages is not empty %}
+        <div class="more mb-20">
+          {% 
+            include 'partial/number-pagination.twig' with { 
+              pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) 
+            } 
+          %}
+        </div>
+      {% endif %}
+
+      <div class="flex justify-center">
+        <a 
+          href="{% if cta_link %}{{ cta_link.link }}{% else %}/{% endif %}" 
+          class="def-button w-full lg:w-1/2 {{ button_theme }}"
+          aria-label="{% if cta_link %}{{ cta_link.title }}{% else %}Back to Home{% endif %}"
+        >{% if cta_link %}{{ cta_link.title }}{% else %}Back to Home{% endif %}</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

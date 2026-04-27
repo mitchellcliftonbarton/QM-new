@@ -1,0 +1,10 @@
+{% set section = fields %}
+
+<section
+  class="svg-group def-x-big lg:def-x-half py-20"
+  aria-label="{{ section.title }} section."
+>
+  {% if section.title %}
+    <h2 class="forma-h2 text-center">{{ section.title }}</h2>
+  {% endif %}
+</section>

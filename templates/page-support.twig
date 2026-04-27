@@ -1,0 +1,39 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap support push-nav">
+    <h1 class="wcag-hidden">Support</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        {% if post.get_field('text_sections') %}
+          {% for section in post.get_field('text_sections') %}
+            <section 
+              id="{{ section.slug|lower|replace({' ': '-'}) }}" 
+              class="svg-group def-x lg:def-x-half pt-20 scroll-to-section"
+              aria-label="{{ section.title }} section."
+            >
+              <h2 class="forma-h2 text-center mb-20">{{ section.title }}</h2>
+
+              {% if section.description %}
+                <div class="description forma-body rich-text spaced mb-20 max-default mx-auto">{{ section.description }}</div>
+              {% endif %}
+
+              {% if section.links %}
+                {% 
+                  include 'partial/links.twig' with {
+                    'links': section.links,
+                    'color': 'neon',
+                    'classes': 'mb-20'
+                  }
+                %}
+              {% endif %}
+            </section>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

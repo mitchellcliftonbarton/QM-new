@@ -1,0 +1,45 @@
+<div class="archive-post-item svg-group def-x grid grid-cols-12 gap-4 lg:gap-def py-def">
+  <a 
+    href="{{ item.link }}" 
+    class="col-span-4 lg:col-span-2"
+    tabindex="-1"
+    aria-label="Go to {{ item.title }}."
+  >
+    {% 
+      include 'partial/image-sizer.twig' with {
+        'image': Image(item.get_field('main_image')),
+        'ratioPaddingVal': 75
+      }
+    %}
+  </a>
+
+  {% 
+    include 'partial/mobile-tags.twig' with {
+      'item': item,
+      'button_theme': button_theme
+    }
+  %}
+
+  <div class="desktop-portion col-span-8 lg:col-span-4">
+    <div class="tags hidden lg:block">
+      {% 
+        include 'partial/tags.twig' with {
+          'item': item,
+          'color': button_theme
+        }
+      %}
+    </div>
+
+    <a 
+      href="{{ item.link }}" 
+      class="forma-body lg:hover:underline"
+      aria-label="Go to {{ item.title }}."
+    >
+      {% if item.get_field('artists')|length == 1 %}
+        <p>{{ item.get_field('artists')[0].name }}</p>
+      {% endif %}
+      
+      <p>{% if item.get_field('artist_title') %}{{ item.get_field('artist_title') }}<br>{% endif %}{{ item.title }}</p>
+    </a>
+  </div>
+</div>

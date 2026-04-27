@@ -1,0 +1,20 @@
+{% set section = fields %}
+
+<section
+  class="svg-group def-x-big lg:def-x-half py-20 flex justify-center"
+  aria-label="Image section"
+>
+  <div class="w-full lg:w-1/2 max-default mx-auto">
+    {% 
+      include 'partial/image-sizer.twig' with {
+        'classes': 'mb-def-1/2',
+        'image': Image(section.image),
+        'loadBgClass': 'bg-grey'
+      }
+    %}
+
+    {% if secetion.image.caption %}
+      <p class="forma-caption">{{ section.image.caption }}</p>
+    {% endif %}
+  </div>
+</section>

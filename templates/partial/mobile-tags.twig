@@ -1,0 +1,104 @@
+<div class="mobile-tags lg:hidden col-span-8">
+  {% if item.post_type == 'exhibition' %}
+    <a 
+      tabindex="-1"
+      href="/exhibition" 
+      class="def-button-sm inline-block mr-4 mb-3 {{ button_theme }}" 
+      aria-label="{% if item.get_field('exhibition_type') == 'On Long Term View' %}View all collections.{% else %}View all exhibitions.{% endif %}"
+    >
+      {% if item.get_field('is_project') %}
+        Project
+      {% elseif item.get_field('exhibition_type') == 'On Long Term View' %}
+        Collection
+      {% else %}
+        Exhibition
+      {% endif %}
+    </a>
+  {% elseif item.post_type == 'event' %}
+    <a 
+      tabindex="-1"
+      href="/event" 
+      class="def-button-sm inline-block mr-4 mb-3 {{ button_theme }}" 
+      aria-label="View all events."
+    >Event</a>
+  {% elseif item.post_type == 'program' %}
+    <a 
+      tabindex="-1"
+      href="/programs/archive" 
+      class="def-button-sm inline-block mr-4 mb-3 {{ button_theme }}"
+      aria-label="View all programs."
+    >Program</a>
+  {% elseif item.post_type == 'staff-member' %}
+    <a 
+      tabindex="-1"
+      href="/board-staff" 
+      class="def-button-sm inline-block mr-4 mb-3 {{ button_theme }}"
+      aria-label="View all staff members."
+    >Staff Member</a>
+  {% elseif item.post_type == 'video' %}
+    <a 
+      tabindex="-1"
+      href="/video-series" 
+      class="def-button-sm inline-block mr-4 mb-3 {{ button_theme }}"
+      aria-label="View all videos."
+    >Video</a>
+  {% elseif item.post_type == 'post' %}
+    <a 
+      tabindex="-1"
+      href="/news/archive" 
+      class="def-button-sm inline-block mr-4 mb-3 {{ button_theme }}"
+      aria-label="View news."
+    >News</a>
+  {% endif %}
+
+  {% if item.post_type == 'exhibition' and item.get_field('exhibition_type') != 'On Long Term View' and item.get_field('is_project') != 1 %}
+    {% set today = 'now'|date("U") %}
+    {% set endDate = item.get_field('ending_date_new')|date("U") %}
+
+    {% if endDate >= today %}
+      <a 
+        href="/exhibitions/current" 
+        class="def-button-sm inline-block {{ button_theme }}"
+        aria-label="View all current exhibitions."
+      >Current</a>
+    {% else %}
+      <a 
+        href="/exhibitions/year/{{ item.get_field('starting_date_new')|date('Y') }}" 
+        class="def-button-sm inline-block {{ button_theme }}"
+        aria-label="View all exhibitions from {{ item.get_field('starting_date_new')|date('Y') }}."
+      >{{ item.get_field('starting_date_new')|date('Y') }}</a>
+    {% endif %}
+  {% elseif item.post_type == 'event' %}
+    {% if item.terms %}
+      <a 
+        href="/events/{{ item.terms[0].slug }}" 
+        class="def-button-sm inline-block {{ button_theme }}"
+        aria-label="View all events in the category of {{ item.terms[0] }}."
+      >{{ item.terms[0] }}</a>
+    {% endif %}
+  {% elseif item.post_type == 'program' %}
+    {% if item.terms %}
+      <a 
+        href="/programs/category/{{ item.terms[0].slug }}" 
+        class="def-button-sm inline-block {{ button_theme }}"
+        aria-label="View all programs in the category of {{ item.terms[0] }}."
+      >{{ item.terms[0] }}</a>
+    {% endif %}
+  {% elseif item.post_type == 'staff-member' %}
+    {% if item.terms %}
+      <a 
+        href="/board-staff/{{ item.terms[0].slug }}" 
+        class="def-button-sm inline-block {{ button_theme }}"
+        aria-label="View staff members in {{ item.terms[0] }} category."
+      >{{ item.terms[0] }}</a>
+    {% endif %}
+  {% elseif item.post_type == 'post' %}
+    {% if item.terms %}
+      <a 
+        href="/news/category/{{ item.terms[0].slug }}" 
+        class="def-button-sm inline-block {{ button_theme }}"
+        aria-label="View all news posts in the category of {{ item.terms[0] }}."
+      >{{ item.terms[0] }}</a>
+    {% endif %}
+  {% endif %}
+</div>

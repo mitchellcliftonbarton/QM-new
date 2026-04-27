@@ -1,0 +1,26 @@
+<div class="post-item w-full lg:{{ item.width }} lg:px-def-1/2">
+  <div class="tags mb-6">
+    <a 
+      href="/history" 
+      class="def-button-sm purple"
+      aria-label="Go to history page."
+    >History</a>
+  </div>
+
+  <a 
+    href="{{ item.link.url }}" 
+    class="block lg:hover:underline"
+    aria-label="Go to {{ item.title }} page."
+  >
+    {% if item.image %}
+      {% 
+        include 'partial/image-sizer.twig' with {
+          'image': Image(item.image),
+          'ratioPaddingVal': 75
+        }
+      %}
+    {% endif %}
+
+    <h3 class="forma-body mt-4">{{ item.title }}</h3>
+  </a>
+</div>

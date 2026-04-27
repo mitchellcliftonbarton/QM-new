@@ -1,0 +1,183 @@
+{
+    "key": "group_627d4ca8706d4",
+    "title": "Card Display",
+    "fields": [
+        {
+            "key": "field_627d4cb7310d7",
+            "label": "Card Width",
+            "name": "card_width",
+            "type": "select",
+            "instructions": "This field will determine the size of the block that links to this post that appears around the site.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "w-1\/2": "Large",
+                "w-1\/3": "Medium",
+                "w-1\/6": "Small"
+            },
+            "default_value": "w-1\/2",
+            "allow_null": 0,
+            "multiple": 0,
+            "ui": 0,
+            "return_format": "value",
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_629a65319df67",
+            "label": "Is Mini Slider?",
+            "name": "is_mini_slider",
+            "type": "true_false",
+            "instructions": "Mark as true if you want the card to be a carousel.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_629a65589df68",
+            "label": "Slides",
+            "name": "slides",
+            "type": "repeater",
+            "instructions": "Repeatable field for slides for Mini Slider field.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_629a65319df67",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 0,
+            "max": 0,
+            "layout": "table",
+            "button_label": "",
+            "sub_fields": [
+                {
+                    "key": "field_629a65699df69",
+                    "label": "Text",
+                    "name": "text",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_629a65709df6a",
+                    "label": "Image",
+                    "name": "image",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "medium",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                }
+            ]
+        },
+        {
+            "key": "field_629a65d806e02",
+            "label": "Card Text",
+            "name": "card_text",
+            "type": "text",
+            "instructions": "If not a mini slider, you can optionally choose to have the card have text instead of an image.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_629a65319df67",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "exhibition"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "event"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "The fields in this group will determine how this post is displayed around the site in its preview.",
+    "show_in_rest": 0,
+    "modified": 1659129709
+}

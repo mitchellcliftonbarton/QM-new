@@ -1,0 +1,31 @@
+#footer {
+  padding-bottom: 7rem;
+
+  @media screen and (min-width: theme("screens.lg")) {
+    padding-bottom: 17rem;
+  }
+
+  body.green-theme & {
+    background-color: theme('colors.neon-green');
+  }
+
+  body.forest-green-theme & {
+    background-color: theme('colors.forest-green');
+  }
+
+  body.purple-theme & {
+    background-color: theme('colors.purple');
+  }
+
+  body.grey-theme & {
+    background-color: theme('colors.grey');
+  }
+
+  body.pink-theme & {
+    background-color: theme('colors.pink');
+  }
+
+  body.brown-theme & {
+    background-color: theme('colors.brown');
+  }
+}

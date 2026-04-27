@@ -1,0 +1,113 @@
+.page-wrap.home {
+  .hero-home {
+    min-height: 850px;
+
+    // @media screen and (min-width: theme("screens.lg")) {
+    //   min-height: initial;
+    // }
+
+    #clock {
+      height: var(--clock-size-mobile);
+      width: var(--clock-size-mobile);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      position: relative;
+
+      @media screen and (min-width: theme('screens.lg')) {
+        height: var(--clock-size);
+        width: var(--clock-size);
+      }
+
+      .clock-second,
+      .clock-minute,
+      .clock-hour,
+      .clock-indicator {
+        position: absolute;
+        left: calc(50% - 1px);
+        width: 6px;
+        background: white;
+        transform-origin: bottom center;
+        z-index: 2;
+        // border-top-left-radius: 20px;
+        // border-top-right-radius: 20px;
+        border-radius: 20px;
+      }
+
+      .clock-second {
+        height: calc((var(--clock-size-mobile) / 2) - 25px);
+        margin-top: 25px;
+        background: white;
+        animation: time 60s infinite steps(60);
+        z-index: 3;
+
+        @media screen and (min-width: theme('screens.lg')) {
+          height: calc((var(--clock-size) / 2) - 40px);
+          margin-top: 40px;
+        }
+      }
+
+      .clock-minute {
+        height: calc((var(--clock-size-mobile) / 2) - 50px);
+        margin-top: 50px;
+        background: white;
+        animation: time 3600s linear infinite;
+
+        @media screen and (min-width: theme('screens.lg')) {
+          height: calc((var(--clock-size) / 2) - 70px);
+          margin-top: 70px;
+        }
+      }
+
+      .clock-hour {
+        height: calc((var(--clock-size-mobile) / 2) - 70px);
+        margin-top: 70px;
+        animation: time 43200s linear infinite;
+
+        @media screen and (min-width: theme('screens.lg')) {
+          height: calc((var(--clock-size) / 2) - 100px);
+          margin-top: 100px;
+        }
+      }
+
+      .clock-indicator {
+        height: calc((var(--clock-size-mobile) / 2) - 2px);
+        border-top: 1.8rem solid white;
+        background: none;
+        width: 6px;
+        border-radius: 20px;
+
+        @media screen and (min-width: theme('screens.lg')) {
+          height: calc((var(--clock-size) / 2) - 2px);
+        }
+      }
+
+      @for $i from 1 through 60 {
+        section:nth-of-type(#{$i}) {
+          transform: rotateZ(calc(30deg * #{$i}));
+        }
+      }
+    }
+
+    #open-text,
+    #close-text {
+      display: none;
+
+      &.active {
+        display: inline;
+      }
+    }
+  }
+}
+
+@keyframes time {
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+.page-wrap.visit {
+  #visit-map {
+    padding-bottom: 80%;
+  }
+}

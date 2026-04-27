@@ -1,0 +1,90 @@
+<ul 
+  role="list" 
+  aria-label="Visiting Hours" 
+  class="forma-body mb-12"
+>
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Mon</p>
+      <p class="col-span-2">
+          {% if options.hours.monday_hours.open and options.hours.monday_hours.close %}
+              {{ options.hours.monday_hours.open|date('g:i a') }} – {{ options.hours.monday_hours.close|date('g:i a') }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Tue</p>
+      <p class="col-span-2">
+          {% if options.hours.tuesday_hours.open and options.hours.tuesday_hours.close %}
+              {{ options.hours.tuesday_hours.open|date('g:i a') }} – {{ options.hours.tuesday_hours.close|date('g:i a') }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Wed</p>
+      <p class="col-span-2">
+          {% if options.hours.wednesday_hours.open and options.hours.wednesday_hours.close %}
+              {{ options.hours.wednesday_hours.open|date('g:i a') }} – {{ options.hours.wednesday_hours.close|date('g:i a') }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Thur</p>
+      <p class="col-span-2">
+          {% if options.hours.thursday_hours.open and options.hours.thursday_hours.close %}
+              {{ options.hours.thursday_hours.open|date('g:i a') }} – {{ options.hours.thursday_hours.close|date('g:i a') }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Fri</p>
+      <p class="col-span-2">
+          {% if options.hours.friday_hours.open and options.hours.friday_hours.close %}
+              {{ options.hours.friday_hours.open|date('g:i a') }} – {{ options.hours.friday_hours.close|date('g:i a') }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Sat</p>
+      <p class="col-span-2">
+          {% if options.hours.saturday_hours.open and options.hours.saturday_hours.close %}
+              {{ options.hours.saturday_hours.open|date('g:i a') }} – {{ options.hours.saturday_hours.close|date('g:i a') }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Sun</p>
+      <p class="col-span-2">
+          {% if options.hours.sunday_hours.open and options.hours.sunday_hours.close %}
+              {{ options.hours.sunday_hours.open|date('g:i a') }} – {{ options.hours.sunday_hours.close|date('g:i a') }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+</ul>
+
+{% if options.address.address_link %}
+  <a href="{{ options.address.address_link }}" target="_blank">
+    <div class="forma-body">{{ options.address.address_text | nl2br }}</div>
+  </a>
+{% else %}
+  <div class="forma-body">{{ options.address.address_text | nl2br }}</div>
+{% endif %}

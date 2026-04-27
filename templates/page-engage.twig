@@ -1,0 +1,89 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap engage push-nav">
+    <h1 class="wcag-hidden">Engage</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        {% if post.get_field('sections')|length > 0 %}
+          {% for section in post.get_field('sections') %}
+            <section 
+              id="{{ section.slug|lower|replace({' ': '-'}) }}" 
+              class="svg-group px-def-1/4 lg:def-x-half pt-20 scroll-to-section self-clear"
+              aria-label="{{ section.title }} section."
+            >
+              {% if section.title %}
+                <h2 class="forma-h2 text-center mb-20">{{ section.title }}</h2>
+              {% endif %}
+
+              {% if section.description %}
+                <div class="description forma-body rich-text spaced mb-20 max-default mx-auto px-def-1/4 lg:px-0">{{ section.description }}</div>
+              {% endif %}
+
+              {% if section.posts|length > 0 %}
+                <div class="mb-20">
+                  {% for item in section.posts %}
+                    {% 
+                      include 'partial/post-item.twig' with {
+                        'item': item,
+                        'buttonColor': 'grey',
+                        'width': item.get_field('card_width')
+                      }
+                    %}        
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if section.block_links %}
+                <div class="grid grid-cols-6 gap-def-1/2 lg:gap-def mb-20 px-def-1/4 lg:def-x-half">
+                  {% for item in section.block_links %}
+                    <a 
+                      href="{{ item.link.url }}" 
+                      class="color-block grey rounded-2xl col-span-3 lg:col-span-1"
+                      aria-label="Go to {{ item.link.title }} page."
+                    >
+                      <div class="inner relative">
+                        <div class="absolute top-0 left-0 w-full h-full p-def flex justify-center items-center">
+                          <p class="forma-body text-center lg:hidden" aria-hidden>{{ item.link.title|trunc(25) }}</p>
+                          <p class="forma-body text-center hidden lg:block" aria-hidden>{{ item.link.title|trunc(50) }}</p>
+                          <p class="wcag-hidden">{{ item.link.title }}</p>
+                        </div>
+                      </div>
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if section.small_post_links %}
+                <div class="mb-20 self-clear">
+                  {% for item in section.small_post_links %}
+                    {% 
+                      include 'partial/post-item.twig' with {
+                        'width': 'w-1/6',
+                        'item': item,
+                        'buttonColor': 'grey'
+                      }
+                    %}        
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if section.links|length > 0 %}
+                {% 
+                  include 'partial/links.twig' with {
+                    'links': section.links,
+                    'color': 'grey',
+                    'classes': 'mb-20 px-def-1/4 lg:px-0'
+                  }
+                %}
+              {% endif %}
+            </section>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

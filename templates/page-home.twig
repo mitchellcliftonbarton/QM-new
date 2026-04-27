@@ -1,0 +1,162 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap home push-nav">
+    <h1 class="wcag-hidden">Home</h1>
+    
+    <!-- HERO SECTION -->
+    {% include 'partial/home-hero.twig' %}
+
+    <div class="def-x pb-20">
+      <div class="svg-section start-center">
+        <div class="svg-wrapper"></div>
+
+        <!-- FEATURED POSTS -->
+        <section 
+          aria-label="Featured Posts" 
+          class="featured-posts svg-group px-def-1/4 lg:def-x-half pt-40 pb-20"
+        >
+          {% for item in post.get_field('featured_posts') %}
+            {% 
+              include 'partial/post-item.twig' with {
+                'width': item.get_field('card_width'),
+                'item': item
+              }
+            %}        
+          {% endfor %}
+
+          <div class="flex justify-center items-center clear-both px-def-1/4 lg:px-0">
+            {% 
+              include 'partial/def-button.twig' with {
+                'href': '/whats-on',
+                'classes': 'w-full lg:w-1/2 green',
+                'label': "View What's On page.",
+                'title': "What's On"
+              }
+            %}
+          </div>
+        </section>
+
+        <!-- HISTORY -->
+        <section 
+          aria-label="Museum History Section." 
+          class="history svg-group def-x lg:def-x-half py-20"
+        >
+          <h2 class="forma-h2 text-black text-center mb-20">{{ post.get_field('history_title') }}</h2>
+
+          {% if post.get_field('history_items')|length > 0 %}
+            {% for item in post.get_field('history_items') %}
+              {% 
+                include 'partial/history-item.twig' with {
+                  'item': item
+                }
+              %}        
+            {% endfor %}
+          {% endif %}
+
+          <div class="flex justify-center clear-both">
+            {% 
+              include 'partial/def-button.twig' with {
+                'href': '/history',
+                'classes': 'w-full lg:w-1/2 bg-purple text-black lg:hover:bg-black lg:hover:text-purple',
+                'label': "View History page.",
+                'title': "History"
+              }
+            %}
+          </div>
+        </section>
+
+        <!-- NEWS -->
+        <section 
+          aria-label="Latest News section." 
+          class="news svg-group px-def-1/4 lg:def-x-half py-20"
+        >
+          <h2 class="forma-h2 text-black text-center mb-20">{{ post.get_field('magazine_title') }}</h2>
+
+          {% for item in most_recent_articles %}
+            {% 
+              include 'partial/post-item.twig' with {
+                'width': item.get_field('card_width'),
+                'item': item,
+                'buttonColor': 'neon'
+              }
+            %}        
+          {% endfor %}
+
+          <div class="flex justify-center clear-both px-def-1/4 lg:px-0">
+            {% 
+              include 'partial/def-button.twig' with {
+                'href': '/news',
+                'classes': 'w-full w-full lg:w-1/2 bg-neon-green text-black lg:hover:bg-black lg:hover:text-neon-green',
+                'label': "View News page.",
+                'title': "News"
+              }
+            %}
+          </div>
+        </section>
+
+        <!-- SUBSCRIBE -->
+        <section 
+          aria-label="Subscription options section." 
+          class="subscribe svg-group def-x lg:def-x-half py-20 relative z-10"
+        >
+          <h2 class="forma-h2 text-black text-center mb-20">{{ post.get_field('newsletter_section').title }}</h2>
+
+          <div class="flex flex-col items-center justify-center clear-both">
+            <!-- Begin Mailchimp Signup Form -->
+            <div id="mc_embed_signup" class="observe-svg w-full lg:w-1/2">
+              <form 
+                action="https://queensmuseum.us8.list-manage.com/subscribe/post?u=28093319092432e759214db15&amp;id=32b24c670e" 
+                method="post" 
+                id="mc-embedded-subscribe-form" 
+                name="mc-embedded-subscribe-form" 
+                class="validate w-full mb-def-1/2 lg:mb-def" 
+                target="_blank" 
+                novalidate
+              >
+                <div id="mc_embed_signup_scroll">
+                  <div class="mc-field-group relative">
+                    <div class="relative mb-4">
+                      <label for="mce-EMAIL" class="wcag-hidden">Email Address  <span class="asterisk">*</span></label>
+                      <input 
+                        type="email" 
+                        placeholder="Your Email" 
+                        value="" 
+                        name="EMAIL" 
+                        class="required py-4 lg:py-6 forma-body text-center rounded-2xl email bg-neon-green text-black w-full" 
+                        id="mce-EMAIL"
+                      >
+                      <button type="submit" value="Subscribe" name="subscribe" aria-label="Subscribe to Queens Museum.">
+                        {% include 'partial/svg/right-arrow.twig' %}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div id="mce-responses" class="clear">
+                    <div class="response forma-body text-center text-black" id="mce-error-response" style="display:none"></div>
+                    <div class="response forma-body text-center text-black" id="mce-success-response" style="display:none"></div>
+                  </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+
+                  <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_28093319092432e759214db15_32b24c670e" tabindex="-1" value=""></div>
+                </div>
+              </form>
+            </div>
+            <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='MMERGE3';ftypes[3]='text';fnames[4]='MMERGE4';ftypes[4]='number';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
+            <!--End mc_embed_signup-->
+
+            {% if post.get_field('newsletter_section').donate_link %}
+              {% 
+                include 'partial/def-button.twig' with {
+                  'href': post.get_field('newsletter_section').donate_link.url,
+                  'classes': 'w-full lg:w-1/2 bg-neon-green text-black lg:hover:bg-black lg:hover:text-neon-green',
+                  'label': "Donate to the Museum.",
+                  'title': post.get_field('newsletter_section').donate_link.title
+                }
+              %}
+            {% endif %}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock %}

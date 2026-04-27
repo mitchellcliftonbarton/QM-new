@@ -1,0 +1,153 @@
+@layer base {
+  @font-face {
+    font-family: "Forma";
+    src: url("./../fonts/QueensForma-Regular.ttf") format("truetype"),
+      url("./../fonts/QueensForma-Regular.woff2") format("woff2"),
+      url("./../fonts/QueensForma-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "Forma";
+    src: url("./../fonts/QueensForma-Italic.ttf") format("truetype"),
+      url("./../fonts/QueensForma-Italic.woff2") format("woff2"),
+      url("./../fonts/QueensForma-Italic.woff") format("woff");
+    font-weight: normal;
+    font-style: italic;
+  }
+
+  @font-face {
+    font-family: "Forma";
+    src: url("./../fonts/QueensForma-Bold.ttf") format("truetype"),
+      url("./../fonts/QueensForma-Bold.woff2") format("woff2"),
+      url("./../fonts/QueensForma-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  @variants responsive {
+    .forma-huge {
+      @apply text-forma-huge-mobile font-forma;
+
+      @media screen and (min-width: theme("screens.lg")) {
+        @apply text-forma-huge;
+      }
+
+      sup {
+        font-size: 4rem;
+        display: inline-block;
+
+        @media screen and (min-width: theme("screens.lg")) {
+          transform: translateY(-20px);
+        }
+      }
+    }
+
+    .forma-h1 {
+      @apply text-forma-h1-mobile font-forma;
+
+      @media screen and (min-width: theme("screens.lg")) {
+        @apply text-forma-h1;
+      }
+    }
+
+    .forma-h2 {
+      @apply text-forma-h2-mobile font-forma;
+
+      @media screen and (min-width: theme("screens.lg")) {
+        @apply text-forma-h2;
+      }
+    }
+
+    .forma-body {
+      @apply text-forma-body-mobile font-forma;
+      letter-spacing: .02rem;
+
+      @media screen and (min-width: theme("screens.lg")) {
+        @apply text-forma-body;
+      }
+
+      &.spaced {
+        line-height: 1.175;
+      }
+
+      &.rich-text {
+        a {
+          text-decoration: underline;
+          transition: opacity .3s;
+
+          &:hover {
+            @media screen and (min-width: theme("screens.lg")) {
+              opacity: .5;
+            }
+          }
+        }
+
+        figure {
+          width: 100% !important;
+
+          img {
+            margin-bottom: 1rem;
+          }
+
+          figcaption {
+            @apply forma-caption;
+          }
+        }
+
+        h1 {
+          @apply forma-h1 mb-16 mt-28;
+          text-align: center;
+        }
+
+        h2 {
+          @apply forma-h2;
+          text-align: center;
+          font-weight: normal !important;
+
+          b {
+            font-weight: normal !important;
+          }
+        }
+
+        ul {
+          list-style: none;
+          padding-left: 5rem;
+
+          li {
+            text-indent: -25px;
+
+            &:before {
+              content: '— ';
+              text-indent: -10px;
+            }
+          }
+        }
+
+        img {
+          width: 100%;
+          margin-bottom: 5rem;
+        }
+
+        // .no-indent {
+        //   text-indent: 0 !important;
+        // }
+      }
+    }
+
+    .forma-caption {
+      @apply text-forma-caption-mobile font-forma;
+
+      @media screen and (min-width: theme("screens.lg")) {
+        @apply text-forma-caption;
+      }
+    }
+  }
+}

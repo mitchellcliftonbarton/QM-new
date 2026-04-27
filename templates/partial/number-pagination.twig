@@ -1,0 +1,40 @@
+<nav 
+  class="number-pagination"
+  aria-label="Pagination Navigation"
+>
+  <ul class="pages flex justify-center">
+    {% if pagination.prev.link %}
+      <li>
+        <a 
+          href="{{ pagination.prev.link }}" 
+          class="forma-body lg:hover:underline mx-3 inline-block"
+          aria-label="Go to previous page."
+        >Prev</a>
+      </li>
+    {% endif %}
+
+		{% for page in posts.pagination.pages %}
+			<li class="mx-3" aria-current="{% if page.link %}false{% else %}true{% endif %}">
+				{% if page.link %}
+					<a 
+            href="{{ page.link }}" 
+            class="forma-body lg:hover:underline"
+            aria-label="Go to page {{ page.title }} of pagination."
+          >{{ page.title }}</a>
+				{% else %}
+					<span class="forma-body underline" aria-label="Current page is {{ page.title }}">{{page.title}}</span>
+				{% endif %}
+			</li>
+		{% endfor %}
+
+    {% if pagination.next.link %}
+      <li>
+        <a 
+          href="{{ pagination.next.link }}" 
+          class="forma-body lg:hover:underline mx-3 inline-block"
+          aria-label="Go to next page."
+        >Next</a>
+      </li>
+    {% endif %}
+	</ul>
+</nav>

@@ -1,0 +1,70 @@
+<nav 
+  id="mobile-menu" 
+  class="fixed top-0 left-0 h-full w-full bg-white push-nav ignore-mobile-sublinks px-def-1/2 pb-def lg:hidden"
+  role="navigation"
+  aria-label="Mobile Menu Navigation"
+  tabindex="-1"
+  aria-hidden
+>
+  <ul class="pt-def">
+    {% if options.tickets_link %}
+      <li class="mb-def-1/2">
+        <a 
+          class="def-button neon w-full block mobile-tickets-link" 
+          tabindex="-1" 
+          href="{{ options.tickets_link.url }}" 
+          target="{{ options.tickets_link.target }}"
+          aria-label="Go to ticketing page. This will open a new tab."
+        >{{ options.tickets_link.title }}</a>
+      </li>
+    {% endif %}
+
+    <li class="mb-def-1/2">
+      <form 
+        role="search" 
+        method="get" 
+        id="mobile-searchform" 
+        action="{{ site.link }}" 
+        aria-label="Seach form for Queens Museum."
+      >
+        <input 
+          class="def-button neon w-full" 
+          tabindex="-1" 
+          type="text" 
+          value="" 
+          name="s" 
+          id="mobile-s" 
+          placeholder="Search..."
+          aria-label="Search website."
+        >
+        <button 
+          type="submit" 
+          tabindex="-1" 
+          aria-label="Search Queens Museum."
+        >
+          {% include 'partial/svg/right-arrow.twig' %}
+        </button>
+      </form>
+    </li>
+
+    <li aria-hidden id="mobile-translate" class="translate mb-def-1/2">
+
+      {{ function('do_shortcode', '[gtranslate]') }}
+
+      {% include 'partial/svg/caret-down.twig' %}
+    </li>
+
+    {% for item in mobile_main_menu.items %}
+      <li class="mb-def-1/2">
+        <a 
+          role="link"
+          tabindex="-1"
+          class="def-button w-full block {{ item.button_color }}" 
+          href="{{ item.link }}"
+        >{{ item.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div id="translate-options"></div>
+</nav>

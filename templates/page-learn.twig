@@ -1,0 +1,47 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap learn push-nav">
+    <h1 class="wcag-hidden">Learn</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        {% if post.get_field('learn_section') %}
+          {% for section in post.get_field('learn_section') %}
+            <section 
+              id="{{ section.slug|lower|replace({' ': '-'}) }}" 
+              class="svg-group px-def-1/4 lg:def-x-half pt-20 scroll-to-section self-clear"
+              aria-label="{{ section.title }} section."
+            >
+              <h2 class="forma-h2 text-center mb-20">{{ section.title }}</h2>
+
+              {% if section.items|length > 0 %}
+                {% for item in section.items %}
+                  {% 
+                    include 'partial/post-item.twig' with {
+                      'item': item,
+                      'buttonColor': 'pink',
+                      'width': item.get_field('card_width')
+                    }
+                  %}        
+                {% endfor %}
+              {% endif %}
+
+              {% if section.links|length > 0 %}
+                {% 
+                  include 'partial/links.twig' with {
+                    'links': section.links,
+                    'color': 'pink',
+                    'classes': 'mb-20 px-def-1/4 lg:px-0'
+                  }
+                %}
+              {% endif %}
+            </section>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

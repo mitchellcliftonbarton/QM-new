@@ -1,0 +1,54 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap support push-nav">
+    <h1 class="wcag-hidden">Shop</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        {% if post.get_field('shop_section') %}
+          {% for section in post.get_field('shop_section') %}
+            <section 
+              id="{{ section.slug|lower|replace({' ': '-'}) }}" 
+              class="svg-group def-x pt-20 scroll-to-section"
+              aria-label="{{ section.tag_title }} shop section."
+            >
+              <h2 class="forma-h2 text-center mb-20">{{ section.headline }}</h2>
+
+              <div class="grid grid-cols-4 gap-def">
+                {% for item in section.items %}
+                  <div class="col-span-2 lg:col-span-1 inline-block mb-20">
+                    <div class="tags flex flex-wrap items-start">
+                      <span class="def-button-sm no-hover neon mr-4 inline-block mb-3 lg:mb-6">Shop</span>
+                      <span class="def-button-sm no-hover neon inline-block">{{ section.tag_title }}</span>
+                    </div>
+
+                    <a href="{{ item.buy_link }}" class="lg:hover:underline">
+                      {% if item.image %}
+                        {% 
+                          include 'partial/image-sizer.twig' with {
+                            'image': Image(item.image),
+                            'ratioPaddingVal': 75,
+                            'classes': 'mb-6'
+                          }
+                        %}
+                      {% endif %}
+
+                      <h3 class="forma-body">{{ item.title }}</h3>
+                      {% if item.brand %}
+                        <p class="forma-body">{{ item.brand }}</p>
+                      {% endif %}
+                      <p class="forma-body mb-6">{{ item.price }}</p>
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+            </section>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

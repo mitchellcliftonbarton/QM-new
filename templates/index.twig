@@ -1,0 +1,44 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap news push-nav">
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        <!-- FEATURED POSTS -->
+        <section 
+          aria-label="News Posts" 
+          class="news-posts svg-group px-def-1/4 lg:def-x-half py-20 self-clear"
+        >
+					<h2 class="forma-h2 text-black text-center mb-20">{{ post.get_field('headline') }}</h2>
+					
+          <div class="flex flex-wrap">
+            {% for item in post.get_field('featured_posts') %}
+              {% 
+                include 'partial/post-item.twig' with {
+                  'width': item.get_field('card_width'),
+                  'item': item,
+                  'buttonColor': 'neon',
+                  'nofloat': true
+                }
+              %}        
+            {% endfor %}
+          </div>
+
+          <div class="flex justify-center items-center clear-both px-def-1/4 lg:px-0">
+            {% 
+              include 'partial/def-button.twig' with {
+                'href': '/news/archive',
+                'classes': 'w-full lg:w-1/2 neon',
+                'label': "More News",
+                'title': "More News"
+              }
+            %}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

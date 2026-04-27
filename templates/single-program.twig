@@ -1,0 +1,240 @@
+{% extends "base.twig" %}
+
+{% set color = 'grey' %}
+
+{% if post.get_field('is_learn') == 1 %}
+  {% set color = 'pink' %}
+{% endif %}
+
+{% block content %}
+	<div class="page-wrap single-program push-nav" data-breadcrumb="true">
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        <section class="title svg-group py-20 def-x">
+          <h1 class="forma-h1 text-center">{{ post.title }}</h1>
+        </section>
+
+        <section class="intro-content svg-group py-20 def-x">
+          <div class="max-default mx-auto mb-16">
+            {% 
+              include 'partial/image-sizer.twig' with {
+                'classes': 'mb-def-1/2',
+                'image': Image(post.get_field('main_image')),
+                'loadBgClass': 'bg-pink'
+              }
+            %}
+
+            {% if post.get_field('main_image').caption %}
+              <p class="forma-caption">{{ post.get_field('main_image').caption }}</p>
+            {% endif %}
+          </div>
+
+          {% if post.get_field('top_links') %}
+            {% 
+              include 'partial/links.twig' with {
+                'links': post.get_field('top_links'),
+                'color': color,
+                'classes': 'mb-20'
+              }
+            %}
+          {% endif %}
+
+          {% if post.get_field('description') %}
+            <div class="description forma-body rich-text spaced mb-16 max-default mx-auto">{{ post.get_field('description') | raw }}</div>
+          {% endif %}
+
+          {% if post.get_field('links') %}
+            {% 
+              include 'partial/links.twig' with {
+                'links': post.get_field('links'),
+                'color': color
+              }
+            %}
+          {% endif %}
+        </section>
+
+        {% if post.get_field('images')|length > 0 %}
+          <section class="image-gallery svg-group py-20 def-x">
+            <h2 class="forma-h2 text-center mb-20">Discover Images of the Program.</h2>
+
+            <div class="grid grid-cols-6 gap-def-1/2 lg:gap-def items-start">
+              {% for image in post.get_field('images') %}
+                <button 
+                  class="image relative col-span-3 lg:col-span-1" 
+                  data-index="{{ loop.index0 }}"
+                  aria-label="Open image carousel for {{ post.title }} to index number {{ loop.index }}"
+                >
+                  {% 
+                    include 'partial/image-sizer.twig' with {
+                      'classes': 'col-span-1 mb-def',
+                      'image': Image(image),
+                      'loadBgClass': 'bg-pink'
+                    }
+                  %}
+
+                  {% include 'partial/svg/plus.twig' %}
+                </button>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('related_events') %}
+          <section class="image-gallery svg-group py-20 def-x">
+            <h2 class="forma-h2 text-center mb-20">Attend one of our program's events.</h2>
+
+            <div class="grid grid-cols-12 gap-def">
+              {% for item in post.get_field('related_events') %}
+                <div class="col-span-12 lg:col-span-3 mb-def">
+                  <div class="tags">
+                    {% 
+                      include 'partial/tags.twig' with {
+                        'item': item,
+                        'color': 'pink'
+                      }
+                    %}
+                  </div>
+
+                  <a href="{{ item.link }}" class="block lg:hover:opacity-50">
+                    {% if item.get_field('main_image') %}
+                      {% 
+                        include 'partial/image-sizer.twig' with {
+                          'image': Image(item.get_field('main_image')),
+                          'ratioPaddingVal': 75
+                        }
+                      %}
+                    {% endif %}
+
+                    <h2 class="forma-body mt-4">{{ item.title }}</h2>
+                    {% if item.get_field('event_type') == 'Start/End' %}
+                      {% if item.starting_date_new|date('m.d.y') == item.ending_date_new|date('m.d.y') %}
+                        <p class="forma-body">{{ item.get_field('starting_date_new')|date('m.d.y') }}, {{ item.get_field('starting_time_new')|date('g:i a') }} – {{ item.get_field('ending_time_new')|date('g:i a') }}</p>
+                      {% else %}
+                        <p class="forma-body">{{ item.get_field('starting_date_new')|date('m.d.y') }}, {{ item.get_field('starting_time_new')|date('g:i a') }}{% if item.get_field('ending_date_new') and item.get_field('ending_time_new') %} – {{ item.get_field('ending_date_new')|date('m.d.y') }}, {{ item.get_field('ending_time_new')|date('g:i a') }}{% endif %}</p>
+                      {% endif %}
+                    {% elseif item.get_field('event_type') == 'Full Day' %}
+                      <p class="forma-body">{{ item.starting_date_new|date('m.d.y') }}, Full Day</p>
+                    {% elseif item.get_field('event_type') == 'Ongoing' %}
+                      <p class="forma-body">{{ item.starting_date_new|date('m.d.y') }} — Ongoing</p>
+                    {% endif %}
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('sponsors').logos or post.get_field('sponsors').title or post.get_field('sponsors').text %}
+          <section 
+            class="sponsors svg-group py-20 def-x"
+            aria-label="Sponsors section."
+          >
+            <h2 class="forma-h2 text-center mb-20">{{ post.get_field('sponsors').title }}</h2>
+
+            {% if post.get_field('sponsors').text %}
+              <div class="forma-body mb-20 max-default mx-auto rich-text spaced">{{ post.get_field('sponsors').text }}</div>
+            {% endif %}
+
+            <div class="grid grid-cols-6 gap-def-1/2 lg:gap-def">
+              {% for item in post.get_field('sponsors').logos %}
+                <div class="sponsor-image bg-light-grey rounded-lg overflow-hidden col-span-3 lg:col-span-1">
+                  <div class="inner relative">
+                    <div class="absolute top-0 left-0 w-full h-full p-def">
+                      <img 
+                        class="object-contain object-center w-full h-full" 
+                        src="{{ Image(item).src }}" 
+                        alt="{{ Image(item).alt }}"
+                      >
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('related_links') %}
+          {% 
+            include 'partial/related-items.twig' with {
+              'items': post.get_field('related_links'),
+              'color': color
+            }
+          %}
+        {% endif %}
+      </div>
+    </div>
+
+    {% if post.get_field('images')|length > 0 %}
+      <!-- CAROUSEL OVERLAY -->
+      <div 
+        id="image-gallery-carousel" 
+        class="fixed top-0 left-0 w-full h-full p-def flex flex-col {% if post.get_field('is_learn') == 1 %}bg-pink{% else %}bg-grey{% endif %}"
+        aria-label="Program images carousel"
+        aria-expanded="false"
+        aria-hidden="true"
+        data-no-slide="{% if post.get_field('images')|length > 1 %}false{% else %}true{% endif %}"
+      >
+        <div class="top flex-0-0 flex justify-center items-center relative pb-def">
+          <p class="forma-body absolute left-0"><span id="current-index">1</span> of {{ post.get_field('images')|length }}</p>
+          
+          <div class="buttons flex">
+            {% if post.get_field('images')|length > 1 %}
+              <button 
+                id="prev" 
+                class="forma-body mx-4 relative"
+                tabindex="-1"
+                aria-label="View previous image in carousel."
+              >Prev</button>
+              <button 
+                id="next" 
+                class="forma-body mx-4 relative"
+                tabindex="-1"
+                aria-label="View next image in carousel."
+              >Next</button>
+            {% else %}
+              <p class="forma-body opacity-0 pointer-events none" aria-hidden>Hidden text</p>
+            {% endif %}
+          </div>
+
+          <button 
+            id="image-gallery-carousel-close" 
+            class="absolute right-0"
+          >
+            {% include 'partial/svg/x.twig' %}
+          </button>
+        </div>
+
+        <div class="swiper-container carousel h-full w-full">
+          <div class="swiper-wrapper">
+            {% for image in post.get_field('images') %}
+              <div 
+                class="swiper-slide flex flex-col items-center justify-center h-full w-full" 
+                aria-hidden
+                {% if Image(image).caption %}data-caption="{{ Image(image).caption }}"{% endif %}
+              >
+                <div class="h-full w-full">
+                  <div class="h-full w-full relative">
+                    <div class="w-full h-full absolute top-0 left-0 w-full h-full">
+                      <img 
+                        class="object-contain object-center w-full h-full"
+                        src="{{ Image(image).src }}" 
+                        alt="{{ Image(image).alt }}"
+                      >
+                    </div>
+                  </div>
+                </div>
+                {% if Image(image).caption %}
+                  <div class="w-full py-def-1/2 max-default">
+                    <p class="forma-body text-left">{{ Image(image).caption }}</p>
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+<a 
+  href="{{ href }}" 
+  class="def-button {{ classes }}"
+  aria-label="{{ label }}"
+  target="{% if target %}{{ target }}{% else %}_self{% endif %}"
+>
+  <span class="lg:hidden" aria-hidden>{{ title|trunc(25) }}</span>
+  <span class="hidden lg:inline" aria-hidden>{{ title|trunc(50) }}</span>
+  <span class="wcag-hidden">{{ title }}</span>
+</a>

@@ -1,0 +1,21 @@
+{% set section = fields %}
+{% set theme = 'neon' %}
+
+{% if site_theme == 'brown-theme' %}
+  {% set theme = 'brown' %}
+{% endif %}
+
+<section
+  class="svg-group def-x-big lg:def-x-half py-20 flex justify-center"
+  aria-label="Call to action section"
+>
+  {% 
+    include 'partial/def-button.twig' with {
+      'href': section.link.url,
+      'classes': 'w-full lg:w-1/2 ' ~ theme,
+      'label': "Go to " ~ section.link.title,
+      'target': section.link.target,
+      'title': section.link.title
+    }
+  %}
+</section>

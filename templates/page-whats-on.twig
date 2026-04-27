@@ -1,0 +1,141 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap whats-on push-nav">
+    <h1 class="wcag-hidden">What's On</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        {% if current|length > 0 %}
+          <section 
+            id="current-exhibitions" 
+            class="svg-group scroll-to-section pt-20 px-def-1/4 lg:def-x-half self-clear"
+            aria-label="Current Exhibitions"
+          >
+            <h2 class="forma-h2 text-black text-center px-12 mb-16">{{ post.get_field('current_exhibitions_title') }}</h2>
+
+            {% for item in current %}
+              {% 
+                include 'partial/post-item.twig' with {
+                  'width': item.get_field('card_width'),
+                  'item': item
+                }
+              %}        
+            {% endfor %}
+          </section>
+        {% endif %}
+
+        {% if events|length > 0 %}
+          <section 
+            id="events" 
+            class="svg-group scroll-to-section pt-20 px-def-1/4 lg:def-x-half clear-both self-clear"
+            aria-label="Events Section"
+          >
+            <h2 class="forma-h2 text-black text-center px-12 mb-16">{{ post.get_field('events_title') }}</h2>
+
+            {% for item in events %}
+              {% 
+                include 'partial/post-item.twig' with {
+                  'width': item.get_field('card_width'),
+                  'item': item
+                }
+              %}        
+            {% endfor %}
+
+            <div class="clear-both flex justify-center my-20 px-def-1/4 lg:px-0">
+              <a 
+                href="/calendar/?sort=date&filter=event" 
+                class="def-button w-full lg:w-1/2 green"
+                aria-label="Explore all upcoming events"
+              >Explore Calendar</a>
+            </div>
+          </section>
+        {% endif %}
+
+        {% if collections|length > 0 %}
+          <section 
+            id="collection" 
+            class="svg-group scroll-to-section pt-20 px-def-1/4 lg:def-x-half clear-both self-clear"
+            aria-label="Museum Collections."
+          >
+            <h2 class="forma-h2 text-black text-center px-12 mb-16">{{ post.get_field('collections_title') }}</h2>
+
+            {% for item in collections %}
+              {% 
+                include 'partial/post-item.twig' with {
+                  'width': item.get_field('card_width'),
+                  'item': item
+                }
+              %}        
+            {% endfor %}
+          </section>
+        {% endif %}
+
+        {% if projects|length > 0 %}
+          <section 
+            id="projects" 
+            class="svg-group scroll-to-section clear-both pt-20 px-def-1/4 lg:def-x-half self-clear"
+            aria-label="Museum Projects."
+          >
+            <h2 class="forma-h2 text-black text-center px-12 mb-16">{{ post.get_field('projects_title') }}</h2>
+
+            {% for item in projects %}
+              {% 
+                include 'partial/post-item.twig' with {
+                  'width': item.get_field('card_width'),
+                  'item': item
+                }
+              %}        
+            {% endfor %}
+          </section>
+        {% endif %}
+        
+        {% if upcoming_exhibitions|length > 0 %}
+          <section 
+            id="upcoming-exhibitions" 
+            class="svg-group scroll-to-section clear-both pt-20 px-def-1/4 lg:def-x-half self-clear"
+            aria-label="Upcoming Exhibitions."
+          >
+            <h2 class="forma-h2 text-black text-center px-12 mb-16">{{ post.get_field('upcoming_exhibitions_title') }}</h2>
+
+            {% for item in upcoming_exhibitions %}
+              {% 
+                include 'partial/post-item.twig' with {
+                  'width': item.get_field('card_width'),
+                  'item': item
+                }
+              %}        
+            {% endfor %}
+          </section>
+        {% endif %}
+
+        <section 
+          id="past-exhibitions-&-projects" 
+          class="svg-group scroll-to-section clear-both py-20 px-def-1/4 lg:def-x-half self-clear"
+          aria-label="Past Exhibitions."
+        >
+          <h2 class="forma-h2 text-black text-center px-12 mb-16">{{ post.get_field('past_exhibitions_title') }}</h2>
+
+          {% for item in past_exhibitions %}
+            {% 
+              include 'partial/post-item.twig' with {
+                'width': 'w-1/6',
+                'item': item
+              }
+            %}        
+          {% endfor %}
+
+          <div class="clear-both flex justify-center mt-20 px-def-1/4 lg:px-0">
+            <a 
+              href="/exhibitions/past" 
+              class="def-button w-full lg:w-1/2 green"
+              aria-label="Go to Past Exhibitions Archive."
+            >Past Exhibitions & Projects</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock %}

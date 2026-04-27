@@ -1,0 +1,58 @@
+<section 
+  class="related-links svg-group py-20 def-x-big"
+  aria-label="Related Links section"
+>
+  {% if options.related_items_text %}
+    <h2 class="forma-h2 text-center mb-20">{{ options.related_items_text }}</h2>
+  {% endif %}
+
+  <div class="grid grid-cols-12 gap-def-1/2 lg:gap-def">
+    {% for item in items %}
+      <div class="related-item col-span-12 lg:col-span-6 grid grid-cols-12 lg:grid-cols-6 gap-4 lg:gap-def mb-def">
+        <a 
+          href="{{ item.link }}" 
+          class="col-span-4 lg:col-span-2"
+          tabindex="-1"
+          aria-label="Go to {{ item.title }} page."
+        >
+          {% 
+            include 'partial/image-sizer.twig' with {
+              'image': Image(item.get_field('main_image')),
+              'ratioPaddingVal': 75
+            }
+          %}
+        </a>
+
+        {% 
+          include 'partial/mobile-tags.twig' with {
+            'item': item,
+            'button_theme': color
+          }
+        %}
+
+        <div class="desktop-portion col-span-8 lg:col-span-4">
+          <div class="tags hidden lg:block">
+            {% 
+              include 'partial/tags.twig' with {
+                'item': item,
+                'color': color
+              }
+            %}
+          </div>
+
+          <a 
+            href="{{ item.link }}" 
+            class="forma-body"
+            aria-label="Go to {{ item.title }} page."
+          >
+            {% if item.get_field('artists')|length == 1 %}
+              <p>{{ item.get_field('artists')[0].name }}</p>
+            {% endif %}
+            
+            <p>{{ item.title }}</p>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>

@@ -1,0 +1,162 @@
+<ul role="list" aria-label="Hours" class="w-full forma-caption lg:forma-body">
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Mon</p>
+      <p class="col-span-2">
+          {% if options.hours.monday_hours.open and options.hours.monday_hours.close %}
+            {% set open = options.hours.monday_hours.open|date('g a') %}
+
+            {% if options.hours.monday_hours.open|date('i') != '00' %}
+                {% set open = options.hours.monday_hours.open|date('g:i a') %}
+            {% endif %}
+
+            {% set close = options.hours.monday_hours.close|date('g a') %}
+
+            {% if options.hours.monday_hours.close|date('i') != '00' %}
+                {% set open = options.hours.monday_hours.close|date('g:i a') %}
+            {% endif %}
+
+            {{ open }} – <br class="lg:hidden">{{ close }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Tue</p>
+      <p class="col-span-2">
+          {% if options.hours.tuesday_hours.open and options.hours.tuesday_hours.close %}
+            {% set open = options.hours.tuesday_hours.open|date('g a') %}
+
+            {% if options.hours.tuesday_hours.open|date('i') != '00' %}
+                {% set open = options.hours.tuesday_hours.open|date('g:i a') %}
+            {% endif %}
+
+            {% set close = options.hours.tuesday_hours.close|date('g a') %}
+
+            {% if options.hours.tuesday_hours.close|date('i') != '00' %}
+                {% set open = options.hours.tuesday_hours.close|date('g:i a') %}
+            {% endif %}
+
+            {{ open }} – <br class="lg:hidden">{{ close }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Wed</p>
+      <p class="col-span-2">
+          {% if options.hours.wednesday_hours.open and options.hours.wednesday_hours.close %}
+            {% set open = options.hours.wednesday_hours.open|date('g a') %}
+
+            {% if options.hours.wednesday_hours.open|date('i') != '00' %}
+                {% set open = options.hours.wednesday_hours.open|date('g:i a') %}
+            {% endif %}
+
+            {% set close = options.hours.wednesday_hours.close|date('g a') %}
+
+            {% if options.hours.wednesday_hours.close|date('i') != '00' %}
+                {% set open = options.hours.wednesday_hours.close|date('g:i a') %}
+            {% endif %}
+
+            {{ open }} – <br class="lg:hidden">{{ close }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Thur</p>
+      <p class="col-span-2">
+          {% if options.hours.thursday_hours.open and options.hours.thursday_hours.close %}
+            {% set open = options.hours.thursday_hours.open|date('g a') %}
+
+            {% if options.hours.thursday_hours.open|date('i') != '00' %}
+                {% set open = options.hours.thursday_hours.open|date('g:i a') %}
+            {% endif %}
+
+            {% set close = options.hours.thursday_hours.close|date('g a') %}
+
+            {% if options.hours.thursday_hours.close|date('i') != '00' %}
+                {% set open = options.hours.thursday_hours.close|date('g:i a') %}
+            {% endif %}
+
+            {{ open }} – <br class="lg:hidden">{{ close }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Fri</p>
+      <p class="col-span-2">
+          {% if options.hours.friday_hours.open and options.hours.friday_hours.close %}
+            {% set open = options.hours.friday_hours.open|date('g a') %}
+
+            {% if options.hours.friday_hours.open|date('i') != '00' %}
+                {% set open = options.hours.friday_hours.open|date('g:i a') %}
+            {% endif %}
+
+            {% set close = options.hours.friday_hours.close|date('g a') %}
+
+            {% if options.hours.friday_hours.close|date('i') != '00' %}
+                {% set open = options.hours.friday_hours.close|date('g:i a') %}
+            {% endif %}
+
+            {{ open }} – <br class="lg:hidden">{{ close }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Sat</p>
+      <p class="col-span-2">
+          {% if options.hours.saturday_hours.open and options.hours.saturday_hours.close %}
+            {% set open = options.hours.saturday_hours.open|date('g a') %}
+
+            {% if options.hours.saturday_hours.open|date('i') != '00' %}
+                {% set open = options.hours.saturday_hours.open|date('g:i a') %}
+            {% endif %}
+
+            {% set close = options.hours.saturday_hours.close|date('g a') %}
+
+            {% if options.hours.saturday_hours.close|date('i') != '00' %}
+                {% set open = options.hours.saturday_hours.close|date('g:i a') %}
+            {% endif %}
+
+            {{ open }} – <br class="lg:hidden">{{ close }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+
+  <li class="grid grid-cols-3 gap-2">
+      <p class="col-span-1">Sun</p>
+      <p class="col-span-2">
+          {% if options.hours.sunday_hours.open and options.hours.sunday_hours.close %}
+            {% set open = options.hours.sunday_hours.open|date('g a') %}
+
+            {% if options.hours.sunday_hours.open|date('i') != '00' %}
+                {% set open = options.hours.sunday_hours.open|date('g:i a') %}
+            {% endif %}
+
+            {% set close = options.hours.sunday_hours.close|date('g a') %}
+
+            {% if options.hours.sunday_hours.close|date('i') != '00' %}
+                {% set open = options.hours.sunday_hours.close|date('g:i a') %}
+            {% endif %}
+
+            {{ open }} – <br class="lg:hidden">{{ close }}
+          {% else %}
+              Closed
+          {% endif %}
+      </p>
+  </li>
+</ul>

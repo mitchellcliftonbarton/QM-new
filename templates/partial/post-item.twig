@@ -1,0 +1,185 @@
+{% set itemWidth = 'w-1/2' %}
+{% if width %}
+  {% set itemWidth = width %}
+{% endif %}
+
+{% set color = 'green' %}
+{% if buttonColor %}
+  {% set color = buttonColor %}
+{% endif %}
+
+{% set hasCal = false %}
+{% if calendar %}
+  {% set hasCal = true %}
+{% endif %}
+
+{% set isDateInFuture = false %}
+{% set now = "now"|date("Y-m-d") %}
+
+{% if date and date >= now %}
+  {% set isDateInFuture = true %}
+{% endif %}
+
+{% set bgColor = 'bg-forest-green' %}
+
+{% if color == 'green' %}
+  {% set bgColor = 'bg-forest-green' %}
+{% elseif color == 'neon' %}
+  {% set bgColor = 'bg-neon-green' %}
+{% endif %}
+
+<div class="post-item {% if nofloat %} no-float{% endif %}{% if itemWidth == 'w-1/2' or itemWidth == 'w-1/3' %}w-full{% else %}w-full{% endif %} lg:{{ itemWidth }} px-def-1/4 lg:px-def-1/2 {% if floatRight %}fr{% endif %} {{ classes }}">
+  <div class="tags">
+    {% 
+      include 'partial/tags.twig' with {
+        'item': item,
+        'color': color,
+        'showAll': calendar
+      }
+    %}
+  </div>
+
+  {% if item.get_field('is_mini_slider') %}
+    <div class="item-content block lg:hover:underline">
+  {% else %}
+    <a 
+      href="{{ item.link }}" 
+      class="item-content block"
+      aria-label="View the post for {{ item.title }}."
+    >
+  {% endif %}
+      {% if item.get_field('is_mini_slider') %}
+        <div class="mini-slider relative overflow-hidden">
+          <div class="swiper absolute top-0 left-0 w-full h-full">
+            <div class="swiper-wrapper">
+              {% for slide in item.get_field('slides') %}
+                <div class="swiper-slide{% if slide.image == false %} flex justify-center items-center {{ bgColor }} {% endif %}">
+                  {% if slide.image %}
+                    <img 
+                      class="object-cover object-center w-full h-full" 
+                      src="{{ Image(slide.image).src }}" 
+                      alt="{{ Image(slide.image).alt }}"
+                    >
+                  {% else %}
+                    <p class="forma-h2 text-black">{{ slide.text }}</p>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      {% elseif item.get_field('card_text') %}
+        <div class="text-card relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center {{ bgColor }}">
+            <p class="forma-h2 text-black">{{ item.get_field('card_text') }}</p>
+          </div>
+        </div>
+      {% else %}
+        {% if item.get_field('main_image') %}
+          {% 
+            include 'partial/image-sizer.twig' with {
+              'image': Image(item.get_field('main_image')),
+              'ratioPaddingVal': 75
+            }
+          %}
+        {% else %}
+          {% 
+            include 'partial/image-sizer.twig' with {
+              'noImage': true
+            }
+          %}
+        {% endif %}
+      {% endif %}
+
+      {% if item.get_field('is_mini_slider') %}
+        <a href="{{ item.link }}" aria-label="View the post for {{ item.title }}.">
+      {% endif %}
+
+      <div class="titles">
+        <h3 class="forma-body mt-4">{% if item.get_field('artist_title') %}{{ item.get_field('artist_title') }}<br>{% endif %}{{ item.title }}</h3>
+        {% if item.post_type == 'exhibition' %}
+          {% if item.get_field('exhibition_type') == 'Default' %}
+            <p class="forma-body">{{ item.starting_date_new|date('m.d.y') }} – {{ item.ending_date_new|date('m.d.y') }}</p>
+          {% elseif item.get_field('exhibition_type') == 'Ongoing' %}
+            <p class="forma-body">{{ item.starting_date_new|date('m.d.y') }} – Ongoing</p>
+          {% elseif item.get_field('exhibition_type') == 'On Long Term View' %}
+            <p class="forma-body">On Long-Term View</p>
+          {% endif %}
+        {% elseif item.post_type == 'event' %}
+          {% if item.get_field('event_type') == 'Start/End' %}
+            {% if item.starting_date_new|date('m.d.y') == item.ending_date_new|date('m.d.y') %}
+              <p class="forma-body">{{ item.get_field('starting_date_new')|date('m.d.y') }}, {{ item.get_field('starting_time_new')|date('g:i a') }} – {{ item.get_field('ending_time_new')|date('g:i a') }}</p>
+            {% else %}
+              <p class="forma-body">{{ item.get_field('starting_date_new')|date('m.d.y') }}, {{ item.get_field('starting_time_new')|date('g:i a') }}{% if item.get_field('ending_date_new') and item.get_field('ending_time_new') %} – {{ item.get_field('ending_date_new')|date('m.d.y') }}, {{ item.get_field('ending_time_new')|date('g:i a') }}{% endif %}</p>
+            {% endif %}
+          {% elseif item.get_field('event_type') == 'Full Day' %}
+            <p class="forma-body">{{ item.starting_date_new|date('m.d.y') }}, Full Day</p>
+          {% elseif item.get_field('event_type') == 'Ongoing' %}
+            <p class="forma-body">{{ item.starting_date_new|date('m.d.y') }} – Ongoing</p>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      {% if item.get_field('is_mini_slider') %}
+        </a>
+      {% endif %}
+      
+  {% if item.get_field('is_mini_slider') %}
+    </div>
+  {% else %}
+    </a>
+  {% endif %}
+
+  {% if hasCal and isDateInFuture %}
+    <div 
+      class="dropdown {{ color }} col-span-2 lg:col-span-1 mt-6"
+      aria-expanded="false"
+      aria-controls="add-to-cal-{{ item.title|lower|replace({' ': '-'}) }}"
+    >
+      <button
+        class="def-button clicker w-full relative flex justify-center items-center"
+        aria-label="Open dropdown to see options to add {{ item.title }} to your calendar."
+        aria-live="polite"
+      >
+        <span>Add to Cal</span>
+
+        {% include 'partial/svg/caret-down.twig' %}
+      </button>
+
+      <div 
+        id="add-to-cal-{{ item.title|lower|replace({' ': '-'}) }}"
+        class="content px-def"
+      >
+        <div class="content-inner flex flex-col items-center">
+          <form 
+            class="ics-download w-full" 
+            method="post" 
+            action="{{ function('admin_url', 'admin-ajax.php') }}"
+            aria-label="Form to download an .ICS file for {{ item.title }}."
+          >
+            <input name="action" value="download_ics" type="hidden">
+            <input type="hidden" name="id" value="{{ item.id }}">
+            {% if item.post_type == 'exhibition' %}
+              <input type="hidden" name="date" value="{{ date }}">
+            {% endif %}
+            <button
+              type="submit"
+              class="dropdown-item forma-body w-full text-center pb-def-1/2"
+              aria-label="Download an .ICS file for {{ item.title }}."
+            >Add to iCal</button>
+          </form>
+
+          {% for link in item.get_field('calendar_links') %}
+            <a 
+              href="{{ link.link.url }}"
+              class="dropdown-item forma-body w-full text-center pb-def-1/2"
+              aria-label="Go to {{ link.link.title }} to add to calendar for {{ item.title }}."
+            >{{ link.link.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>

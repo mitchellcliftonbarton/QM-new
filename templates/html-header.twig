@@ -1,0 +1,82 @@
+<!doctype html>
+<!--[if lt IE 9]><html class="no-js no-svg ie lt-ie9 lt-ie8 lt-ie7" {{ site.language_attributes }}> <![endif]-->
+<!--[if IE 9]><html class="no-js no-svg ie ie9 lt-ie9 lt-ie8" {{ site.language_attributes }}> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js no-svg the-post" {{ site.language_attributes }}> <!--<![endif]-->
+<head>
+    <!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-TW1H5WNWBD"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-TW1H5WNWBD'); </script>
+    <meta charset="{{ site.charset }}" />
+    <title>{{ site.title }}{% if post.slug != 'home' %} | {{ post.title }}{% endif %}</title>
+    {% if post.get_field('seo_description') %}
+        <meta name="description" content="{{ post.get_field('seo_description') }}">
+    {% elseif options.seo.description %}
+        <meta name="description" content="{{ options.seo.description }}">
+    {% else %}
+        <meta name="description" content="{{ site.title }}{% if post.slug != 'home' %} | {{ post.title }}{% endif %}">
+    {% endif %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="author" href="{{ site.theme.link }}/humans.txt" />
+    <link rel="pingback" href="{{ site.pingback_url }}" />
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <meta name="google-site-verification" content="pswlbyS7f8GlJEQGfuCsvDq04J-jBTrAM7I8eKLzMLQ" />
+
+    {% if post.get_field('seo_keywords') %}
+        <meta name="keywords" content="{{ post.get_field('seo_keywords') }}">
+    {% elseif options.seo.keywords %}
+        <meta name="keywords" content="{{ options.seo.keywords }}">
+    {% else %}
+    {% endif %}
+    <meta name="author" content="{{ site.title }}">
+
+    <!-- Social Media tags -->
+    <meta property="og:title" content="{{ site.title }}{% if post.slug != 'home' %} | {{ post.title }}{% endif %}">
+
+    {% if post.get_field('seo_description') %}
+        <meta property="og:description" content="{{ post.get_field('seo_description') }}">
+    {% elseif options.seo.description %}
+        <meta property="og:description" content="{{ options.seo.description }}">
+    {% else %}
+        <meta property="og:description" content="{{ site.title }}{% if post.slug != 'home' %} | {{ post.title }}{% endif %}">
+    {% endif %}
+
+    {% if post.get_field('seo_social_image') %}
+        <meta property="og:image" content="{{ Image(post.get_field('seo_social_image')).src }}">
+    {% elseif options.seo.image %}
+        <meta property="og:image" content="{{ Image(options.seo.image).src }}">
+    {% endif %}
+
+    <meta property="og:url" content="{{ site.link }}">
+    {% if post.get_field('seo_social_image') %}
+        <meta name="twitter:card" content="{{ Image(post.get_field('seo_social_image')).src }}">
+    {% elseif options.seo.image %}
+        <meta name="twitter:card" content="{{ Image(options.seo.image).src }}">
+    {% endif %}
+    <meta property="og:site_name" content="{{ site.title }}{% if post.slug != 'home' %} | {{ post.title }}{% endif %}">
+    <meta property="og:type" content="website" />
+    <meta name="twitter:image:alt" content="{{ site.title }}{% if post.slug != 'home' %} | {{ post.title }}{% endif %}">
+
+    <script text="javascript">
+        window.mapState = {
+            initMap: false
+        }
+
+        function initMap () {
+            window.mapState.initMap = true
+        }
+    </script>
+
+    <!-- Pass initMap function into script -->
+    <!-- AIzaSyAubKeBhiGMgEqpkumjTViPLgYRG1uwqVY -->
+    <!-- AIzaSyBOFf9BhvtZztuO6jOI2C8u_CVHtHoeIyg -->
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrkIVpsMtT5yG7LVHLTncdlvxbrYHm9Ww&callback=initMap">
+    </script>
+
+    <link rel="icon" href="{{ theme.path }}/src/images/favicon.png">
+    <link rel="stylesheet" href="{{ theme.path }}/dist/style.css">
+    <script src="{{ theme.path }}/dist/index.js"></script>
+
+    {{function("wp_head")}}
+</head>

@@ -1,0 +1,36 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap calendar-year push-nav">
+    <h1 class="wcag-hidden">{{ year }} Calendar - Page {{ paged }}</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section mb-20">
+        <div class="svg-wrapper"></div>
+
+        {% if posts|length > 0 %}
+          {% for item in posts %}
+            {% 
+              include 'partial/archive-post-item.twig' with { 
+                'item': item,
+                'button_theme': button_theme
+              } 
+            %}
+          {% endfor %}
+        {% else %}
+          <p class="forma-body">No results.</p>
+        {% endif %}
+      </div>
+
+      {% if posts.pagination.pages is not empty %}
+        <div class="more mb-20">
+          {% 
+            include 'partial/number-pagination.twig' with { 
+              pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) 
+            } 
+          %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

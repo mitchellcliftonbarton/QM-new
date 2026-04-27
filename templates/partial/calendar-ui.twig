@@ -1,0 +1,169 @@
+<div id="calendar-ui" class="calendar-ui w-full mb-def" aria-expanded="false">
+  <div
+    class="grid grid-cols-2 gap-def-1/2 lg:gap-def items-start mb-def-1/2 lg:mb-def"
+  >
+    <div 
+      class="dropdown month-dropdown neon col-span-1 relative z-10"
+      aria-expanded="false"
+      aria-controls="month-dropdown"
+    >
+      <button
+        data-current-month="{{ data.current_month }}"
+        id="current-month" 
+        class="def-button clicker w-full relative flex justify-center items-center"
+        aria-label="Open dropdown to select calendar month."
+        aria-live="polite"
+      >
+        <span>{{ data.current_month }}</span>
+
+        {% include 'partial/svg/caret-down.twig' %}
+      </button>
+
+      <div 
+        id="month-dropdown"
+        class="content"
+      >
+        <div class="content-inner flex flex-col items-center pb-def-1/2">
+          {% for item in data.month_titles %}
+            <button 
+              data-month="{{ item }}"
+              class="month-selector dropdown-item forma-body w-full text-center pb-def-1/2{% if data.current_month == item %} active{% endif %}"
+              tabindex="-1"
+              aria-label="Select {{ item }} for calendar month."
+            >{{ item }}</button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div 
+      class="dropdown year-dropdown neon col-span-1 relative z-10"
+      aria-expanded="false"
+      aria-controls="year-dropdown"
+    >
+      <button
+        data-current-year="{{ data.current_year }}"
+        id="current-year" 
+        class="def-button clicker w-full relative flex justify-center items-center"
+        aria-label="Open dropdown to select calendar year."
+        aria-live="polite"
+      >
+        <span>{{ data.current_year }}</span>
+
+        {% include 'partial/svg/caret-down.twig' %}
+      </button>
+
+      <div 
+        id="year-dropdown"
+        class="content px-def"
+      >
+        <div class="content-inner flex flex-col items-center pb-def-1/2">
+          {% for year in data.years %}
+            <button 
+              data-year="{{ year.year }}"
+              class="year-selector dropdown-item forma-body w-full text-center pb-def-1/2{% if data.current_year == year.year %} active{% endif %}"
+              tabindex="-1"
+              aria-label="Select {{ year.year }} for calendar month."
+            >{{ year.year }}</button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="months relative">
+    <div class="grid grid-cols-7 gap-def-1/2 lg:gap-def mb-def-1/2 lg:mb-def">
+      <div class="day-item no-hover col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl">
+        <div class="inner relative">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <span>Su</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-item no-hover col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl">
+        <div class="inner relative">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <span>M</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-item no-hover col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl">
+        <div class="inner relative">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <span>T</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-item no-hover col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl">
+        <div class="inner relative">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <span>W</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-item no-hover col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl">
+        <div class="inner relative">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <span>Th</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-item no-hover col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl">
+        <div class="inner relative">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <span>Fr</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-item no-hover col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl">
+        <div class="inner relative">
+          <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <span>Sa</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% for year in data.years %}
+      {% for month in year.months %}
+        <div 
+          data-year="{{ year.year }}" 
+          data-month="{{ month.month }}"
+          data-month-num="{{ month.month_num }}"
+          data-starting-day="{{ month.starting_day }}"
+          class="month-item {% if month.active %} active{% endif %}"
+        >
+          <div class="grid grid-cols-7 gap-def-1/2 lg:gap-def">
+            {% for day in range(1, month.days) %}
+              {% set is_active = 'not-active' %}
+              {% set starting_day = month.starting_day + 1 %}
+
+              {# {% if starting_day == 0 %}
+                {% set starting_day = 7 %}
+              {% endif %} #}
+
+              {% if data.current_month == month.month and data.current_year == year.year and data.current_day == day %}
+                {% set is_active = 'active' %}
+              {% endif %}
+
+              {% set day_date = year.year ~ '-' ~ month.month_num ~ '-' ~ day %}
+
+              <a 
+                href="/calendar/date/{{ day_date }}?sort={{ sort_val }}&filter={{ filter_val }}" 
+                class="day-item col-span-1 forma-body bg-neon-green flex justify-center items-center rounded-xl {{ is_active }} {{ checkOpenStatus(day_date) }}"
+                {% if loop.first %}
+                  style="grid-column-start: {{ starting_day }}"
+                {% endif %}
+              >
+                <div class="inner relative">
+                  <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+                    <span>{{ day }}</span>
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>

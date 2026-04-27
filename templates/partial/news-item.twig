@@ -1,0 +1,26 @@
+<div class="post-item w-full lg:{{ width }} lg:px-def-1/2">
+  <div class="tags mb-6">
+    <a 
+      href="/magazine" 
+      class="def-button-sm neon"
+      aria-label="Go to magazine page."
+    >Magazine</a>
+  </div>
+
+  <a 
+    href="{{ item.link }}" 
+    class="block lg:hover:underline"
+    aria-label="Go to {{ item.title }} page"
+  >
+    {% if item.main_image %}
+      {% 
+        include 'partial/image-sizer.twig' with {
+          'image': Image(item.main_image),
+          'ratioPaddingVal': 75
+        }
+      %}
+    {% endif %}
+
+    <h2 class="forma-body mt-4">{{ item.title }}</h2>
+  </a>
+</div>

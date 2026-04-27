@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --nav-height: 90px;
+  --animated-nav-height: 60px;
+  --animated-nav-height-2-rows: 92px;
+  --clock-size: 340px;
+  --clock-size-mobile: 200px;
+}
+
+@layer base {
+  html {
+    font-size: 10px;
+  }
+}
+
+@import "global/fonts";
+@import "global/style-guide";
+@import "global/nav";
+@import "global/footer";
+@import "pages/page";
+@import "pages/home";
+@import "pages/posts";
+@import "pages/exhibition";
+@import "pages/history";

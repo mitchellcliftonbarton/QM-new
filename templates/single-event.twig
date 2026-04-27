@@ -1,0 +1,171 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap single-event push-nav" data-breadcrumb="true">
+    <h1 class="wcag-hidden">Event - {{ post.title }}</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        <section 
+          class="title svg-group pt-20 def-x-big lg:def-x-half"
+          aria-label="Title section"
+        >
+          <h1 class="forma-h1 text-center">{{ post.title }}</h1>
+
+          {% if post.get_field('event_type') == 'Start/End' %}
+            {% if post.starting_date_new|date('m.d.y') == post.ending_date_new|date('m.d.y') %}
+              <h2 class="text-center forma-h1 mb-20">{{ post.get_field('starting_date_new')|date('m.d.y') }}, {{ post.get_field('starting_time_new')|date('g:i a') }} – {{ post.get_field('ending_time_new')|date('g:i a') }}</h2>
+            {% else %}
+              <h2 class="text-center forma-h1 mb-20">{{ post.get_field('starting_date_new')|date('m.d.y') }}, {{ post.get_field('starting_time_new')|date('g:i a') }}{% if post.get_field('ending_date_new') and post.get_field('ending_time_new') %} – {{ post.get_field('ending_date_new')|date('m.d.y') }}, {{ post.get_field('ending_time_new')|date('g:i a') }}{% endif %}</h2>
+            {% endif %}
+          {% elseif post.get_field('event_type') == 'Full Day' %}
+            <h2 class="text-center forma-h1 mb-20">{{ post.get_field('starting_date_new')|date('m.d.y') }}, Full Day</h2>
+          {% elseif post.get_field('event_type') == 'Ongoing' %}
+            <h2 class="text-center forma-h1 mb-20">{{ post.get_field('starting_date_new')|date('m.d.y') }} – Ongoing</h2>
+          {% endif %}
+
+          {% if post.get_field('location') %}
+            <h2 class="text-center forma-h2 mb-20">{{ post.get_field('location') }}</h2>
+          {% endif %}
+        </section>
+
+        <section 
+          class="intro-content svg-group py-20 def-x-big lg:def-x-half"
+          aria-label="Intro section"
+        >
+          <div class="max-default mx-auto mb-16">
+            {% 
+              include 'partial/image-sizer.twig' with {
+                'classes': 'mb-def-1/2',
+                'image': Image(post.get_field('main_image')),
+                'loadBgClass': 'bg-grey'
+              }
+            %}
+
+            {% if post.get_field('main_image').caption %}
+              <p class="forma-caption">{{ post.get_field('main_image').caption }}</p>
+            {% endif %}
+          </div>
+
+          {% if is_past == false %}
+            <div class="flex flex-wrap justify-center clear-both mb-20 max-default mx-auto">
+              <div class="w-full lg:w-1/2 lg:px-def-1/2 mb-def-1/2 lg:mb-0">
+                <div 
+                  class="dropdown green" 
+                  aria-expanded="false"
+                  aria-controls="add-to-cal"
+                >
+                  <button
+                    class="def-button clicker w-full relative flex justify-center items-center"
+                    aria-label="Open dropdown to see options to add {{ post.title }} to your calendar."
+                    aria-live="polite"
+                  >
+                    <span>Add to Cal</span>
+
+                    {% include 'partial/svg/caret-down.twig' %}
+                  </button>
+
+                  <div 
+                    id="add-to-cal"
+                    class="content px-def"
+                  >
+                    <div class="content-inner flex flex-col items-center pb-def-1/2">
+                      <form 
+                        class="ics-download w-full" 
+                        method="post" 
+                        action="{{ function('admin_url', 'admin-ajax.php') }}"
+                        aria-label="Form to download an .ICS file for {{ post.title }}."
+                      >
+                        <input name="action" value="download_ics" type="hidden">
+                        <input type="hidden" name="id" value="{{ post.id }}">
+                        <button
+                          type="submit"
+                          class="dropdown-item forma-body w-full text-center pb-def-1/2"
+                          aria-label="Download an .ICS file for {{ post.title }}."
+                        >Add to iCal</button>
+                      </form>
+
+                      {% for item in post.get_field('calendar_links') %}
+                        <a 
+                          href="{{ item.link.url }}"
+                          class="dropdown-item forma-body w-full text-center pb-def-1/2"
+                          aria-label="Go to {{ link.link.title }} to add to calendar for {{ item.title }}."
+                        >{{ item.link.title }}</a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {% if post.get_field('rsvp_link') %}
+                <div class="w-full lg:w-1/2 lg:px-def-1/2">
+                  {% 
+                    include 'partial/def-button.twig' with {
+                      'href': post.get_field('rsvp_link').url,
+                      'label': "RSVP to " ~ post.title,
+                      'title': 'RSVP to Event',
+                      'classes': 'green'
+                    }
+                  %}
+                </div>
+              {% else %}
+                <div class="w-full lg:w-1/2 lg:px-def-1/2">
+                  {% 
+                    include 'partial/def-button.twig' with {
+                      'href': '/visit',
+                      'label': 'Plan your visit',
+                      'title': 'Plan Your Visit',
+                      'classes': 'green'
+                    }
+                  %}
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if post.get_field('description') %}
+            <div class="description forma-body rich-text spaced mb-16 max-default mx-auto">{{ post.get_field('description') }}</div>
+          {% endif %}
+        </section>
+
+        {% if post.get_field('sponsors').headline or post.get_field('sponsors').sponsors_images or post.get_field('sponsors').text %}
+          <section 
+            class="sponsors svg-group py-20 def-x-big lg:def-x-half"
+            aria-label="Sponsors section."
+          >
+            <h2 class="forma-h2 text-center mb-20">{{ post.get_field('sponsors').headline }}</h2>
+
+            <div class="forma-body mb-20 max-default mx-auto rich-text spaced">{{ post.get_field('sponsors').text }}</div>
+
+            <div class="grid grid-cols-6 gap-def">
+              {% for item in post.get_field('sponsors').sponsors_images %}
+                <div class="sponsor-image bg-light-grey rounded-lg overflow-hidden">
+                  <div class="inner relative">
+                    <div class="absolute top-0 left-0 w-full h-full p-def">
+                      <img 
+                        class="object-contain object-center w-full h-full" 
+                        src="{{ Image(item).src }}" 
+                        alt="{{ Image(item).alt }}"
+                      >
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('related_links') %}
+          {% 
+            include 'partial/related-items.twig' with {
+              'items': post.get_field('related_links'),
+              'color': 'green'
+            }
+          %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

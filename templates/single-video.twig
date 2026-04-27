@@ -1,0 +1,114 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap single-video push-nav">
+    <h1 class="wcag-hidden">Video Detail - {{ post.title }}</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        <section 
+          class="title svg-group py-20 def-x"
+          aria-label="Title section"
+        >
+          {% if post.get_field('series_title') %}
+            <h1 class="forma-h1 text-center">{{ post.get_field('series_title') }}</h1>
+          {% else %}
+            <h1 class="forma-h1 text-center">{{ post.title }}</h1>
+          {% endif %}
+          
+          {% if post.get_field('subtitle') %}
+            <h2 class="text-center forma-h1">{{ post.get_field('subtitle') }}</h2>
+          {% endif %}
+        </section>
+
+        <section class="video svg-group py-20 def-x" aria-label="Video section">
+          <div 
+            class="default-video mb-16 max-default mx-auto" 
+            data-yt-id="{% if post.get_field('youtube_id') %}{{ post.get_field('youtube_id') }}{% else %}false{% endif %}"
+            data-video-file="{% if post.get_field('video_mp4') %}true{% else %}false{% endif %}"
+          >
+            <div class="sizer relative w-full">
+              <div class="inner absolute top-0 left-0 w-full h-full">
+                {% if post.get_field('youtube_id') == false and post.get_field('video_mp4') %}
+                  <video 
+                    tabindex="-1"
+                    src="{{ post.get_field('video_mp4').url }}" 
+                    class="object-contain object-center w-full h-full" 
+                    preload 
+                    controls
+                  ></video>
+                {% endif %}
+              </div>
+
+              {% if post.get_field('video_poster') %}
+                <div class="overlay absolute top-0 left-0 w-full h-full z-10 flex justify-center items-center">
+                  <img class="object-center object-cover w-full h-full" src="{{ Image(post.get_field('video_poster')).src }}" alt="{{ post.get_field('video_poster').alt }}">
+
+                  <button 
+                    class="play-video neon flex justify-center items-center rounded-xl w-24 h-24 forma-body absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    aria-label="Play video."
+                  >
+                    {% include 'partial/svg/play.twig' %}
+                  </button>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if post.get_field('description') %}
+            <div class="description forma-body rich-text spaced max-default mx-auto">{{ post.get_field('description') }}</div>
+          {% endif %}
+        </section>
+
+        {% if videos_in_category %}
+          <section class="category-videos svg-group py-20 def-x-big lg:def-x">
+            <h2 class="forma-h2 text-center mb-20">View more from this video series.</h2>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-def">
+              {% for video in videos_in_category %}
+                <a href="{{ video.link }}" class="col-span-1 lg:hover:underline">
+                  <div class="image relative mb-4">
+                    {% 
+                      include 'partial/image-sizer.twig' with {
+                        'image': Image(video.get_field('video_poster')),
+                        'ratioPaddingVal': 75
+                      }
+                    %}
+
+                    <div 
+                      class="play-video neon flex justify-center items-center rounded-xl w-16 h-16 forma-body absolute top-4 left-4 bg-forest-green"
+                      aria-label="Play video."
+                    >
+                      {% include 'partial/svg/play.twig' %}
+                    </div>
+                  </div>
+
+                  {% if video.get_field('series_title') %}
+                    <p class="forma-body">{{ video.get_field('series_title') }}</p>
+                  {% else %}
+                    <p class="forma-body">{{ video.title }}</p>
+                  {% endif %}
+                  
+                  {% if video.get_field('subtitle') %}
+                    <p class="forma-body">{{ video.get_field('subtitle') }}</p>
+                  {% endif %}
+                </a>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
+
+        {% if post.get_field('related_links') %}
+          {% 
+            include 'partial/related-items.twig' with {
+              'items': post.get_field('related_links'),
+              'color': 'neon'
+            }
+          %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

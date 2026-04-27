@@ -1,0 +1,217 @@
+<footer 
+    id="footer" 
+    class="relative w-full p-def-1/2 lg:p-def flex flex-wrap lg:flex-nowrap"
+>
+    <div class="w-1/3 lg:w-1/4 mb-12 lg:mb-0 pr-2 lg:pr-4">
+        {% if options.address.address_link %}
+          <a 
+            href="{{ options.address.address_link.url }}" 
+            class="lg:hover:underline" 
+            target="_blank"
+            aria-label="View the Queens Museum in Google Maps. This will open a new tab."
+          >
+            <div class="forma-caption lg:forma-body">{{ options.address.address_text | nl2br }}</div>
+          </a>
+        {% else %}
+          <div class="forma-body">{{ options.address.address_text | nl2br }}</div>
+        {% endif %}
+
+        <nav 
+            class="mt-12 lg:mt-8 hidden lg:block"
+            role="navigation"
+            aria-label="Footer Contact Links Navigation"
+        >
+            <ul>
+                <li>
+                    <a 
+                        class="forma-body lg:hover:underline" 
+                        href="tel:{{ options.phone_number }}"
+                        aria-label="Call the Queens Museum at {{ options.phone_number }}"
+                    >{{ options.phone_number }}</a>
+                </li>
+
+                <li>
+                    <a 
+                        class="forma-body lg:hover:underline" 
+                        href="mailto:{{ options.contact_email }}"
+                        aria-label="Email the Queens Museum at {{ options.contact_email }}"
+                    >{{ options.contact_email }}</a>
+                </li>
+            </ul>
+        </nav>
+
+        <nav 
+          class="lg:hidden mt-def"
+          role="navigation"
+          aria-label="Mobile Footer Secondary Navigation"
+        >
+          <ul>
+            {% if options.tickets_link %}
+              <li class="w-full">
+                  <a 
+                    tabindex="-1"
+                    role="link"
+                    class="forma-caption lg:forma-body lg:hover:underline"
+                    href="{{ options.tickets_link.url }}" 
+                    target="{{ options.tickets_link.target }}"
+                    aria-label="Go to ticketing page. This will open a new tab."
+                  >{{ options.tickets_link.title }}</a>
+              </li>
+            {% endif %}
+
+            {% for item in secondary_footer_menu.items %}
+              <li class="w-full">
+                  <a 
+                    tabindex="-1"
+                    role="link"
+                    class="forma-caption lg:forma-body lg:hover:underline"
+                    href="{{ item.link }}"
+                    aria-label="Go to {{ item.title }}"
+                  >{{ item.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+
+        <nav 
+          class="lg:hidden mt-def"
+          role="navigation"
+          aria-label="Mobile Footer Social Navigation"
+        >
+          <ul>
+            {% for item in social_links_menu.items %}
+              <li class="w-full">
+                  <a 
+                    tabindex="-1"
+                    role="link"
+                    class="forma-caption lg:forma-body lg:hover:underline"
+                    href="{{ item.link }}"
+                    aria-label="Go to {{ item.title }}"
+                  >{{ item.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+    </div>
+
+    <nav 
+      class="mobile-footer-primary-nav w-1/3 lg:hidden px-2"
+      role="navigation"
+      aria-label="Mobile Footer Primary Navigation"
+    >
+      <ul>
+        {% for item in main_menu.items %}
+          <li>
+            <a 
+              tabindex="-1"
+              role="link"
+              class="forma-caption lg:forma-body lg:hover:underline"
+              href="{{ item.link }}"
+              aria-label="Go to {{ item.title }}"
+            >{{ item.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="w-1/3 lg:w-1/4 mb-12 lg:mb-0 pl-2 lg:pl-0">
+      {% include 'partial/hours.twig' %}
+
+      <nav 
+          class="mt-def lg:hidden"
+          role="navigation"
+          aria-label="Mobile Footer Contact Links Navigation"
+      >
+          <ul>
+              <li>
+                  <a 
+                      class="forma-caption lg:forma-body lg:hover:underline break-words" 
+                      href="tel:{{ options.phone_number }}"
+                      aria-label="Call the Queens Museum at {{ options.phone_number }}"
+                  >{{ options.phone_number }}</a>
+              </li>
+
+              <li>
+                  <a 
+                      class="forma-caption lg:forma-body lg:hover:underline break-words" 
+                      href="mailto:{{ options.contact_email }}"
+                      aria-label="Email the Queens Museum at {{ options.contact_email }}"
+                  >{{ options.contact_email }}</a>
+              </li>
+          </ul>
+      </nav>
+    </div>
+
+    <nav 
+      class="footer-primary-nav w-full lg:w-1/4 mb-12 lg:mb-0 hidden lg:block"
+      role="navigation"
+      aria-label="Footer Primary Navigation"
+    >
+      <ul class="flex flex-wrap">
+        {% for item in main_menu.items %}
+          <li class="w-1/2">
+            <a 
+              role="link"
+              class="forma-body lg:hover:underline"
+              href="{{ item.link }}"
+              aria-label="Go to {{ item.title }}"
+            >{{ item.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    {% if social_links_menu.items|length > 0 %}
+      <nav 
+        class="footer-social-nav w-full lg:w-1/6 mb-12 lg:mb-0 hidden lg:block"
+        role="navigation"
+        aria-label="Footer Social Navigation"
+      >
+        <ul class="flex flex-wrap">
+          {% for item in social_links_menu.items %}
+            <li class="w-full">
+                <a 
+                    role="link"
+                    class="forma-body lg:hover:underline"
+                    href="{{ item.link }}"
+                    aria-label="Go to {{ item.title }}"
+                >{{ item.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+
+    {% if secondary_footer_menu.items|length > 0 %}
+      <nav 
+        class="footer-secondary-nav w-full lg:w-1/6 mb-12 lg:mb-0 hidden lg:block"
+        role="navigation"
+        aria-label="Footer Secondary Navigation"
+      >
+        <ul class="flex flex-wrap">
+          {% if options.tickets_link %}
+            <li class="w-full">
+                <a 
+                    role="link"
+                    class="forma-body lg:hover:underline"
+                    href="{{ options.tickets_link.url }}" 
+                    target="{{ options.tickets_link.target }}"
+                    aria-label="Go to ticketing page. This will open a new tab."
+                >{{ options.tickets_link.title }}</a>
+            </li>
+          {% endif %}
+
+          {% for item in secondary_footer_menu.items %}
+            <li class="w-full">
+                <a 
+                    role="link"
+                    class="forma-body lg:hover:underline"
+                    href="{{ item.link }}"
+                    aria-label="Go to {{ item.title }}"
+                >{{ item.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+</footer>

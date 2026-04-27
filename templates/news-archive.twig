@@ -1,0 +1,43 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap news-archive push-nav">
+    <h1 class="wcag-hidden">News Archive - Page {{ paged }}</h1>
+
+    <div class="def-x pt-20 pb-20">
+      <div class="svg-section mb-20">
+        <div class="svg-wrapper"></div>
+
+        {% for item in posts %}
+          {% 
+            include 'partial/archive-post-item.twig' with { 
+              'item': item,
+              'button_theme': 'neon'
+            } 
+          %}
+        {% endfor %}
+      </div>
+
+      {% if posts.pagination.pages is not empty %}
+        <div class="more mb-20">
+          {% 
+            include 'partial/number-pagination.twig' with { 
+              pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) 
+            } 
+          %}
+        </div>
+      {% endif %}
+
+      <div class="flex justify-center">
+        {% 
+          include 'partial/def-button.twig' with {
+            'href': '/news',
+            'classes': 'w-full lg:w-1/2 neon',
+            'label': "Back to News",
+            'title': "Back to News"
+          }
+        %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

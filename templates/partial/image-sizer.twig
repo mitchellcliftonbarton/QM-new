@@ -1,0 +1,36 @@
+{% set ratioPadding = null %}
+{% set lazy = true %}
+{% set loadBg = 'bg-grey' %}
+
+{% if noImage %}
+  {% set ratioPadding = 75 %}
+{% elseif ratioPaddingVal %}
+  {% set ratioPadding = ratioPaddingVal %}
+{% else %}
+  {% set ratioPadding = image.height / image.width * 100 %}
+{% endif %}
+
+{% if loadBgClass %}
+  {% set loadBg = loadBgClass %}
+{% endif %}
+
+{% if noLazy %}
+  {% set lazy = false %}
+{% endif %}
+
+<div class="image-sizer w-full {{ classes }}">
+  <div 
+    class="inner relative" 
+    style="padding-bottom: {{ ratioPadding }}%;"
+  >
+    <div class="image-wrapper absolute top-0 left-0 w-full h-full">
+      {% if noImage == false %}
+        <img 
+          {% if lazy %}data-img="{{ image.src }}"{% else %}src="{{ image.src }}"{% endif %} 
+          alt="{{ image.alt }}"
+          class="{% if lazy %}lazy-load {% endif %}object-cover object-center w-full h-full"
+        >
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap board-staff push-nav">
+    <h1 class="wcag-hidden">Board & Staff - Page {{ paged }}</h1>
+
+    <div class="def-x pt-20 pb-20">
+      <div class="svg-section mb-20">
+        <div class="svg-wrapper"></div>
+
+        <section 
+          class="title svg-group py-20 def-x"
+          aria-label="Title section for {{ term_title }} category for Board and Staff"
+        >
+          <h1 class="forma-h2 text-center">{{ term_title }}</h1>
+        </section>
+
+        {% if posts|length > 0 %}
+          {% for item in posts %}
+            {% set pronouns = item.get_field('pronouns') %}
+
+            <a 
+              href="{{ item.link }}" 
+              class="svg-group def-x grid grid-cols-12 gap-def py-def-1.5 lg:hover:underline"
+              aria-label="Go to page for staff member {{ item.title }}"
+            >
+              <div class="col-span-4 lg:col-span-2">
+                {% 
+                  include 'partial/image-sizer.twig' with {
+                    'image': Image(item.get_field('main_image')),
+                    'ratioPaddingVal': 75
+                  }
+                %}
+              </div>
+
+              <div class="col-span-8 lg:col-span-4">
+                <div class="forma-body">
+                  <p>{{ item.title }}</p>
+                  <p>{{ item.get_field('position_title') }}</p>
+                  {% if pronouns %}
+                    <p>{{ pronouns }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <section 
+            class="def-x-half py-20 svg-group"
+            aria-label="Board and Staff members"
+          >
+            <p class="forma-body text-center">There are no results for staff members in this category at this time.</p>
+          </section>
+        {% endif %}
+      </div>
+
+      {% if posts.pagination.pages is not empty %}
+        <div class="more mb-20">
+          {% 
+            include 'partial/number-pagination.twig' with { 
+              pagination: posts.pagination({show_all: false, mid_size: 3, end_size: 2}) 
+            } 
+          %}
+        </div>
+      {% endif %}
+
+      <div class="flex justify-center">
+        {% 
+          include 'partial/def-button.twig' with {
+            'href': '/whats-on',
+            'classes': 'w-full lg:w-1/2 purple',
+            'label': "Go to What's on page.",
+            'title': "Back to What's On"
+          }
+        %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% set section = fields %}
+
+{% set theme = 'neon' %}
+
+{% if site_theme == 'brown-theme' %}
+  {% set theme = 'brown' %}
+{% endif %}
+
+<section
+  class="svg-group def-x-big lg:def-x-half py-20"
+  aria-label="{{ section.title }} section"
+>
+  {% if section.title %}
+    <h2 class="forma-h2 text-center mb-16">{{ section.title }}</h2>
+  {% endif %}
+
+  {% if section.image %}
+    <div class="mb-16 max-default mx-auto">
+      {% 
+        include 'partial/image-sizer.twig' with {
+          'classes': 'mb-def-1/2',
+          'image': Image(section.image),
+          'loadBgClass': 'bg-grey'
+        }
+      %}
+
+      {% if section.image.caption %}
+        <p class="forma-caption">{{ section.image.caption }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if section.description %}
+    <div class="description forma-body rich-text mb-16 max-default mx-auto">{{ section.description }}</div>
+  {% endif %}
+
+  {% if section.links %}
+    {% 
+      include 'partial/links.twig' with {
+        'links': section.links,
+        'color': theme,
+        'classes': 'mb-16'
+      }
+    %}
+  {% endif %}
+</section>

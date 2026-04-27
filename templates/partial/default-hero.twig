@@ -1,0 +1,59 @@
+{% set hero_image = post.get_field('hero').image %}
+{% set hero_video = post.get_field('hero').video %}
+
+<div class="hero hero-default h-screen-minus-nav flex justify-center items-center bg-light-grey relative{% if post.get_field('hero').overlay_opacity %} overlay-{{ post.get_field('hero').overlay_opacity }}{% endif %}{% if hero_video %} has-vid{% endif %}">
+
+  <div class="absolute bg top-0 left-0 w-full h-full">
+    {% if hero_video %}
+      <video 
+        tabindex="-1"
+        class="vid lazy-load object-cover object-center w-full h-full"
+        data-vid-src="{{ hero_video.url }}"
+        poster="{{ Image(hero_image).src }}"
+      ></video>
+    {% elseif hero_image %}
+      <img 
+        class="lazy-load object-cover object-center w-full h-full"
+        data-img="{{ Image(hero_image).src }}" 
+        alt="{{ Image(hero_image).alt }}"
+      >
+    {% endif %}
+
+    <div class="overlay absolute top-0 left-0 w-full h-full"></div>
+  </div>
+
+  <div class="hero-content z-10 h-full flex flex-col items-center">
+    <div class="spacer"></div>
+
+    <div class="flex-0-0 py-12 w-full lg:w-3/4">
+      <h1 class="forma-h1 text-white text-center px-12 mt-12">{{ title }}</h1>
+    </div>
+
+    <div class="spacer spacer-line relative w-full">
+      <div class="line"></div>
+    </div>
+  </div>
+
+  {% if hero_video %}
+    <div class="absolute top-def left-def z-10 flex">
+      <button 
+        class="video-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative mr-5"
+        aria-label="Play hero video."
+        data-labelfinish="hero video."
+      >
+        {% include 'partial/svg/play.twig' %}
+        {% include 'partial/svg/pause.twig' %}
+      </button>
+
+      <button 
+        class="sound-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative"
+        aria-label="Toggle sound button for hero video."
+        aria-pressed="false"
+        tabindex="-1"
+      >
+        {% include 'partial/svg/audio.twig' %}
+        {% include 'partial/svg/muted.twig' %}
+      </button>
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,115 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap calendar push-nav">
+    <h1 class="wcag-hidden">Calendar</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        <section
+          class="svg-group px-def-1/4 lg:def-x-half pt-20 self-clear"
+        >
+          {% if is_day %}
+            {% set text = 'Discover all exhibitions and events at the Museum' %}
+
+            {% if filter_val == 'event' %}
+              {% set text = 'Discover all events at the Museum' %}
+            {% elseif filter_val == 'exhibition' %}
+              {% set text = 'Discover all exhibitions at the Museum' %}
+            {% endif %}
+
+            <h2 class="forma-h2 text-center mb-16 w-11/12 lg:w-3/4 mx-auto">{{ text }} on <span class="whitespace-nowrap">{{ data.today_date_unformatted|date('F j, Y') }}</span></h2>
+          {% else %}
+            {% set text = 'Discover All Upcoming Exhibitions & Events at the Museum' %}
+
+            {% if filter_val == 'event' %}
+              {% set text = 'Discover All Upcoming Events at the Museum' %}
+            {% elseif filter_val == 'exhibition' %}
+              {% set text = 'Discover All Upcoming Exhibitions at the Museum' %}
+            {% endif %}
+
+            <h2 class="forma-h2 text-center mb-16 w-11/12 lg:w-3/4 mx-auto">{{ text }} from <span class="whitespace-nowrap">{{ data.today_date }}</span> – Onwards</h2>
+          {% endif %}
+          
+          <div class="items">
+            <div id="calendar-ui-section" class="observe-svg w-full lg:w-1/2 float-right px-def-1/4 lg:px-def-1/2 mb-20">
+              <button 
+                id="calendar-button" 
+                class="def-button neon w-full flex justify-center items-center mb-def relative" 
+                aria-label="Open calendar interface"
+              >
+                {% include 'partial/svg/calendar.twig' %}
+
+                {% if is_day %}
+                  <span>Or Select Another Date</span>
+                {% else %}
+                  <span>Or Select a Specific Date</span>
+                {% endif %}
+
+                {% include 'partial/svg/caret-down.twig' %}
+              </button>
+
+              {% include 'partial/calendar-ui.twig' %}
+
+              {% if is_day %}
+                {% 
+                  include 'partial/def-button.twig' with {
+                    'href': '/calendar/',
+                    'classes': 'mb-def neon',
+                    'label': 'Back to All Upcoming Dates',
+                    'title': 'Back to All Upcoming Dates'
+                  }
+                %}
+              {% endif %}
+            </div>
+
+            {% if all_upcoming|length > 0 %}
+              {% for item in all_upcoming %}
+                {% set width = null %}
+
+                {% if item.post_type == 'exhibition' %}
+                  {% set width = 'w-1/2' %}
+                {% elseif item.post_type == 'event' %}
+                  {% set width = 'w-1/4' %}
+                {% endif %}
+
+                {% 
+                  include 'partial/post-item.twig' with {
+                    'width': width,
+                    'item': item,
+                    'buttonColor': 'neon',
+                    'calendar': true,
+                    'date': data.today_date_formatted
+                  }
+                %}        
+              {% endfor %}
+            {% else %}
+              <p class="forma-body text-center">There are no events on this day.</p>
+            {% endif %}
+          </div>
+        </section>
+
+        <section class="svg-group def-x py-20 self-clear">
+          <h2 class="forma-h2 text-center mb-16">Pick a Year & Browse Our Past Events</h2>
+
+          <div class="grid grid-cols-6 gap-def-1/2 lg:gap-def">
+            {% for year in data.years %}
+              <a 
+                href="/calendar/year/{{ year.year }}" 
+                class="color-block neon rounded-2xl col-span-3 lg:col-span-1"
+              >
+                <div class="inner relative">
+                  <div class="absolute top-0 left-0 w-full h-full p-def flex justify-center items-center">
+                    <p class="forma-body text-center">{{ year.year }}</p>
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap visit push-nav">
+    <h1 class="wcag-hidden">Visit</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        {% if post.get_field('sections')|length > 0 %}
+          {% for section in post.get_field('sections') %}
+            <section 
+              id="{{ section.slug|lower|replace({' ': '-'}) }}" 
+              class="svg-group def-x pt-20 scroll-to-section self-clear"
+              aria-label="{{ section.title }} section."
+            >
+              {% if section.title %}
+                <h2 class="forma-h2 text-center mb-20">{{ section.title }}</h2>
+              {% endif %}
+
+              {% if section.intro_text %}
+                <div class="description forma-body rich-text spaced mb-20 max-default mx-auto">{{ section.intro_text }}</div>
+              {% endif %}
+
+              {% if section.intro_links %}
+                {% 
+                  include 'partial/links.twig' with {
+                    'links': section.intro_links,
+                    'color': 'brown',
+                    'classes': 'mb-20'
+                  }
+                %}
+              {% endif %}
+
+              {% if section.has_map_and_hours %}
+                <div class="grid grid-cols-4 gap-def mb-20">
+                  <div class="col-span-4 lg:col-span-2 mb-def lg:mb-0">
+                    <div id="visit-map" class="mb-12"></div>
+
+                    {% if options.address.address_link %}
+                      <a 
+                        href="{{ options.address.address_link.url }}" 
+                        target="_blank"
+                        class="def-button w-full brown block"
+                        aria-label="Open directions in Google Maps."
+                      >Open in Google Maps</a>
+                    {% endif %}
+                  </div>
+
+                  <div class="col-span-4 lg:col-span-1 mb-12 lg:mb-0">
+                    {% include 'partial/visit-hours.twig' %}
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if section.half_column_sections|length > 0 %}
+                <div class="grid grid-cols-2 gap-def mb-20">
+                  {% for item in section.half_column_sections %}
+                    <div class="col-span-2 lg:col-span-1 mb-20">
+                      <h3 class="forma-body mb-8">{{ item.title }}</h3>
+                      <div class="forma-body rich-text spaced">{{ item.text }}</div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if section.fourth_column_sections|length > 0 %}
+                <div class="grid grid-cols-4 gap-def mb-20">
+                  {% for item in section.fourth_column_sections %}
+                    <div class="col-span-4 lg:col-span-1 mb-20 lg:mb-0">
+                      <h3 class="forma-body mb-8">{{ item.title }}</h3>
+                      <div class="forma-body rich-text spaced">{{ item.text }}</div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if section.audio_files|length > 0 %}
+                {% for item in section.audio_files %}
+                  <div class="flex justify-center mb-def lg:mb-20">
+                    {% if item.file %}
+                      <div class="w-full lg:w-1/2 lg:px-def-1/2">
+                        <div
+                          class="audio-player relative py-4 lg:py-6 forma-body text-center rounded-xl bg-brown forma-body text-center text-black w-full" 
+                        >
+                          <button
+                            aria-label="Play audio."
+                            data-labelfinish="audio."
+                            class="relative w-full"
+                            role="slider"
+                          >
+                            <div 
+                              class="icons"
+                            >
+                              {% include 'partial/svg/play.twig' %}
+                              {% include 'partial/svg/pause.twig' %}
+                            </div>
+
+                            <span>{{ item.button_text }}</span>
+                            <audio class="hidden" loop preload src="{{ item.file }}"></audio>
+                          </button>
+
+                          <div role="slider" class="timeline pb-2 pt-12 px-6">
+                            <div class="line relative">
+                              <div 
+                                class="indicator"
+                                aria-valuenow="0"
+                                aria-valuemin="0"
+                                aria-valuemax=""
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% elseif item.link %}
+                      {% set text = item.link.title %}
+                      {% if item.button_text %}
+                        {% set text = item.button_text %}
+                      {% endif %}
+
+                      <div class="w-full lg:w-1/2 lg:mx-def-1/2">
+                        {% 
+                          include 'partial/def-button.twig' with {
+                            'href': item.link.url,
+                            'classes': 'w-full brown',
+                            'label': "Go to " ~ item.link.title ~ " page.",
+                            'title': text
+                          }
+                        %}
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              {% endif %}
+
+              {% if section.links|length > 0 %}
+                {% 
+                  include 'partial/links.twig' with {
+                    'links': section.links,
+                    'color': 'brown',
+                    'classes': 'mb-20'
+                  }
+                %}
+              {% endif %}
+            </section>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

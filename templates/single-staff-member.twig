@@ -1,0 +1,60 @@
+{% extends "base.twig" %}
+
+{% set pronouns = post.get_field('pronouns') %}
+
+{% block content %}
+	<div class="page-wrap single-staff-member push-nav">
+    <h1 class="wcag-hidden">Board & Staff - {{ post.title }}</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        <section 
+          class="title svg-group py-20 def-x"
+          aria-label="Title section"
+        >
+          <h1 class="forma-h1 text-center mb-12">{{ post.title }}</h1>
+          <h2 class="text-center forma-h2">{{ post.get_field('position_title') }}{% if pronouns %}<br>{{ pronouns }}{% endif %}</h2>
+        </section>
+
+        <section 
+          class="intro-content svg-group py-20 def-x"
+          aria-label="Intro section"
+        >
+          <div class="mb-16">
+            {% 
+              include 'partial/image-sizer.twig' with {
+                'classes': 'mb-def-1/2',
+                'image': Image(post.get_field('main_image')),
+                'loadBgClass': 'bg-grey'
+              }
+            %}
+
+            {% if post.get_field('main_image').caption %}
+              <p class="forma-caption">{{ post.get_field('main_image').caption }}</p>
+            {% endif %}
+          </div>
+
+          {% if post.get_field('bio') %}
+            <div class="description forma-body rich-text spaced mb-16 max-default mx-auto">{{ post.get_field('bio') }}</div>
+          {% endif %}
+
+          <div class="grid grid-cols-2 gap-def">
+            <a 
+              href="/board-staff" 
+              class="def-button col-span-2 lg:col-span-1 purple"
+              aria-label="Back to all board and staff"
+            >Back to People</a>
+
+            <a 
+              href="{{ next_link.link }}" 
+              class="def-button col-span-2 lg:col-span-1 purple"
+              aria-label="Go to next staff member"
+            >Next</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock %}

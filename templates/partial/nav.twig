@@ -1,0 +1,273 @@
+<header 
+  id="nav" 
+  class="fixed top-0 left-0 w-full {% if sublinks %} has-sublinks lg:def-x lg:pb-0{% else %} lg:def-x lg:pb-def{% endif %}"
+>
+  <div class="nav-bg absolute top-0 left-0 w-full h-full hidden lg:block"></div>
+
+  {% if sublinks and post.post_type != 'exhibition' %}
+    <nav 
+      class="mobile-sublinks absolute bottom-0 left-0 w-full lg:hidden def-x pb-def"
+      role="navigation"
+      aria-label="Mobile Secondary Navigation"
+    >
+      <p class="forma-body text-center mb-def-1/2">{% if sublinks.title %}{{ sublinks.title }}{% else %}{{ post.title }}{% endif %}</p>
+
+      {% if sublinks.type == 'sort' %}
+        <div class="flex">
+          <div class="w-1/2">
+            <ul>
+              <li class="forma-body">Sort by</li>
+              {% for item in sublinks.items %}
+                <li>
+                  <a 
+                    href="{{ item.link }}" 
+                    class="sort-link filter-link forma-body mb-1 inline-block mr-10{% if item.active %} active{% endif %}"
+                  >{{ item.title }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+          </div>
+
+          {% if sublinks.filters %}
+            <div class="w-1/2">
+              <ul>
+                <li class="forma-body">Filter by</li>
+                {% for item in sublinks.filters %}
+                  <li>
+                    <a 
+                      href="{{ item.link }}" 
+                      class="sort-link filter-link forma-body mb-1 inline-block mr-10{% if item.active %} active{% endif %}"
+                    >{{ item.title }}</a>
+                  </li>
+              {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+      {% else %}
+        <ul>
+          {% if sublinks.type != 'static' %}
+            {% for item in sublinks.items %}
+              <li>
+                {% if sublinks.type == 'jumplinks' %}
+                  <a 
+                    href="#" 
+                    data-target="{{ item.title|lower|replace({' ': '-'}) }}" 
+                    class="scroll-to-link forma-body mb-1 inline-block mr-10"
+                    tabindex="-1"
+                    aria-label="Jump to {{ item.title }} section."
+                  >{{ item.title }}</a>
+                {% else %}
+                  <a 
+                    href="{{ item.link }}" 
+                    class="sort-link forma-body mb-1 inline-block mr-10{% if item.active %} underline{% endif %}"
+                  >{{ item.title }}</a>
+                {% endif %}
+              </li>
+            {% endfor %}
+          {% else %}
+            <li>
+              <p class="forma-body">{{ post.title }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </nav>
+  {% endif %}
+
+  <div class="nav-inner flex flex-wrap justify-center relative z-10 p-def lg:pt-def lg:px-0 lg:pb-0">
+    <nav 
+      class="primary-nav w-1/3 hidden lg:block"
+      role="navigation"
+      aria-label="Primary Navigation"
+    >
+      <ul class="flex flex-wrap">
+        {% for item in main_menu.items %}
+          <li class="w-1/2">
+            <a 
+              role="link"
+              class="forma-body{% if post.slug == item.slug %} active{% endif %}"
+              href="{{ item.link }}"
+            >{{ item.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    {% if sublinks and post.post_type != 'exhibition'%}
+      <button id="mobile-sublinks-open" class="absolute left-def-1/2 lg:hidden forma-body flex justify-center items-center">
+        {% include 'partial/svg/caret-down.twig' %}
+      </button>
+    {% endif %}
+
+    <div class="main-logo w-auto lg:w-1/3 flex justify-center items-start">
+      <a 
+        role="link" 
+        href="/" 
+        class="uppercase"
+        aria-label="Queens Museum Home"
+      >
+        {% include 'partial/svg/logo.twig' %}
+      </a>
+    </div>
+
+    <nav 
+      class="utility-nav w-1/3 hidden lg:flex justify-end" 
+      role="navigation"
+      aria-label="Utility Navigation"
+    >
+      <ul>
+        {% if options.tickets_link %}
+          <li class="mb-4 relative">
+            <a 
+              class="tickets-link"
+              href="{{ options.tickets_link.url }}" 
+              target="{{ options.tickets_link.target }}"
+              aria-label="Go to ticketing page. This will open a new tab."
+            >
+              {% include 'partial/svg/tickets.twig' %}
+              <span>{{ options.tickets_link.title }}</span>
+            </a>
+          </li>
+        {% endif %}
+
+        <li class="mb-4">
+          <form class="relative" role="search" method="get" id="searchform" action="{{ site.link }}" aria-label="Search form for Queens Museum.">
+            <input type="text" value="" name="s" id="s" placeholder="Search..." aria-label="Search website.">
+            <button 
+              type="submit" 
+              tabindex="-1"
+              aria-label="Search Queens Museum."
+            >
+              {% include 'partial/svg/right-arrow.twig' %}
+            </button>
+          </form>
+        </li>
+
+        <li class="translator relative">
+          {{ function('do_shortcode', '[gtranslate]') }}
+
+          {% include 'partial/svg/caret-down.twig' %}
+        </li>
+      </ul>
+    </nav>
+
+    <button id="mobile-menu-open" class="absolute right-def-1/2 lg:hidden forma-body flex justify-center items-center">
+      {% include 'partial/svg/hb.twig' %}
+      {% include 'partial/svg/x.twig' %}
+    </button>
+
+    {% if sublinks %}
+      <nav 
+        class="secondary-nav w-full pt-6 pb-3 hidden lg:block"
+        role="navigation"
+        aria-label="Secondary Navigation"
+      >
+        <div class="flex items-start justify-start h-full">
+          {% set sublinkTitle = post.title %}
+          {% set sublinkTitleLink = '/' %}
+          
+          {% if sublinks.title %}
+            {% set sublinkTitle = sublinks.title %}
+          {% endif %}
+
+          {% if sublinks.title_link %}
+            {% set sublinkTitleLink = sublinks.title_link %}
+          {% endif %}
+
+          {% set isBackToTop = false %}
+
+          {% if post.slug == 'learn' or post.slug == 'engage' or post.slug == 'about' or post.slug == 'visit' or post.slug == 'support' or post.slug == 'calendar' or post.slug == 'shop' or post.slug == 'whats-on' %}
+            {% set isBackToTop = true %}
+          {% endif %}
+
+          {% if isBackToTop %}
+            <button
+              class="forma-body mr-10 flex-0-0 back-to-top lg:hover:underline"
+              aria-label="Back to top."
+            >{{ sublinkTitle }}</button>
+          {% elseif sublinkTitle != post.title %}
+            <a 
+              id="breadcrumb-title" 
+              href="{{ sublinkTitleLink }}"
+              class="forma-body mr-10 flex-0-0 {% if isBackToTop %}back-to-top{% endif %}"
+              style="opacity: 0;"
+              data-page="{{ sublinkTitle }}"
+              data-post-type="{{ post.post_type }}"
+            >{{ sublinkTitle }}</a>
+          {% else %}
+            <p
+              class="forma-body mr-10 flex-0-0"
+            >{{ sublinkTitle }}</p>
+          {% endif %}
+
+          <div class="mr-10">
+            {% include 'partial/svg/caret.twig' %}
+          </div>
+
+          {% if sublinks.subtitle %}
+            <p class="forma-body mr-20 flex-0-0 mb-4">{{ sublinks.subtitle }}</p>
+          {% endif %}
+
+          <ul class="flex items-center flex-wrap">
+            {% if sublinks.type == 'sort' %}
+              <li>
+                <p class="forma-body mr-10">Sort by:</p>
+              </li>
+            {% endif %}
+
+            {% if sublinks.type != 'static' %}
+              {% for item in sublinks.items %}
+                <li>
+                  {% if sublinks.type == 'jumplinks' %}
+                    <a 
+                      href="#" 
+                      data-target="{{ item.title|lower|replace({' ': '-'}) }}" 
+                      class="scroll-to-link forma-body mr-10"
+                      aria-label="Jump to {{ item.title }} section."
+                    >{{ item.title }}</a>
+                  {% else %}
+                    <a 
+                      href="{{ item.link }}" 
+                      class="sort-link forma-body mr-10{% if item.active %} underline{% endif %}"
+                      aria-label="Sort by {{ item.title }}."
+                    >{{ item.title }}</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            {% else %}
+              <li>
+                <p class="forma-body">{% if post.type == 'exhibition' %}{% if post.get_field('artist_title') %}{{ post.get_field('artist_title') }}, {% endif %}{{ post.title }}{% else %}{{ post.title }}{% endif %}</p>
+              </li>
+            {% endif %}
+
+            {% if sublinks.filters %}
+              <li class="ml-4">
+                <p class="forma-body mr-10">Filter by:</p>
+              </li>
+
+              {% for item in sublinks.filters %}
+                <li>
+                  <a 
+                    href="{{ item.link }}" 
+                    class="sort-link forma-body mr-10{% if item.active %} underline{% endif %}"
+                    aria-label="Filter by {{ item.title }}."
+                  >{{ item.title }}</a>
+                </li>
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    {% endif %}
+  </div>
+
+  <button 
+    id="nav-expand" 
+    class="absolute right-def cursor-pointer" 
+    tabindex="-1" 
+    aria-label="Expand main navigation."
+  >
+    {% include 'partial/svg/caret-down.twig' %}
+  </button>
+</header>

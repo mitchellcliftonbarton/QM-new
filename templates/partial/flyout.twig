@@ -1,0 +1,99 @@
+<section 
+  id="artist-flyout" class="fixed top-0 w-full h-full flex"
+  aria-expanded="false"
+>
+  <div class="flyout-content bg-white p-def">
+    <div class="relative w-full h-full">
+      <div class="absolute top-0 left-0 w-full h-full">
+        {% if options.artist_intervention.flyout.video %}
+          <video 
+            tabindex="-1"
+            data-vid-src="{{ options.artist_intervention.flyout.video.url }}"
+            class="vid lazy-load object-center w-full h-full {{ options.artist_intervention.flyout.position }}"
+            muted
+            loop
+            playsinline
+            preload
+            poster="{{ Image(options.artist_intervention.flyout.image).src }}"
+          ></video>
+        {% elseif options.artist_intervention.flyout.image %}
+          <img 
+            data-img="{{ Image(options.artist_intervention.flyout.image).src }}" 
+            alt="{{ Image(options.artist_intervention.flyout.image).alt }}"
+            class="lazy-load object-center w-full h-full {{ options.artist_intervention.flyout.position }}"
+          >
+        {% endif %}
+      </div>
+
+      {% if options.artist_intervention.flyout.video %}
+        <div class="absolute top-def left-def z-10 flex">
+          <button 
+            class="video-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative mr-5"
+            aria-label="Play artist intervention flyout video."
+            data-labelfinish="artist intervention flyout video."
+            tabindex="-1"
+          >
+            {% include 'partial/svg/play.twig' %}
+            {% include 'partial/svg/pause.twig' %}
+          </button>
+
+          <button 
+            class="sound-player-button flex justify-center items-center rounded-xl w-16 h-16 forma-body relative"
+            aria-label="Toggle sound button for artist intervention flyout video."
+            aria-pressed="false"
+            tabindex="-1"
+          >
+            {% include 'partial/svg/audio.twig' %}
+            {% include 'partial/svg/muted.twig' %}
+          </button>
+        </div>
+      {% endif %}
+
+      {% set exhibition_link_post = Post(options.artist_intervention.flyout.exhibition_link) %}
+
+      {% if exhibition_link_post %}
+      <a 
+        href="{{ exhibition_link_post.link }}" 
+        class="artist-info absolute bottom-def left-0 w-11/12 lg:w-1/3 bg-{{ bg }} rounded-2xl py-4 lg:py-6 left-1/2 transform -translate-x-1/2 text-center lg:hover:bg-black lg:hover:text-{{ bg }}"
+        tabindex="-1"
+        aria-label="Go to detail page for this artist intervention."
+      >
+      {% else %}
+      <div class="artist-info absolute bottom-def left-0 w-11/12 lg:w-1/3 bg-{{ bg }} rounded-2xl py-4 lg:py-6 left-1/2 transform -translate-x-1/2 text-center lg:hover:bg-black lg:hover:text-{{ bg }}">
+      {% endif %}
+        {% if options.artist_intervention.flyout.artist_name %}
+          <p class="forma-body">{{ options.artist_intervention.flyout.artist_name }}</p>
+        {% endif %}
+
+        {% if options.artist_intervention.flyout.title and options.artist_intervention.flyout.year %}
+          <p class="forma-body">{{ options.artist_intervention.flyout.title }}, {{ options.artist_intervention.flyout.year }}</p>
+        {% endif %}
+      {% if exhibition_link_post %}
+      </a>
+      {% else %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <button 
+    id="flyout-opener" 
+    class="absolute top-1/2 right-0"
+    aria-label="Open flyout to see an artist intervention on the website."
+    aria-expanded="false"
+    aria-controls="artist-flyout"
+  >
+    <span class="text-forma-h2-mobile font-forma">?</span>
+  </button>
+
+  <button 
+    id="flyout-closer" 
+    class="absolute top-1/2 right-0"
+    aria-label="Close flyout"
+    tabindex="-1"
+  >
+    <span class="text-forma-h2-mobile font-forma">
+      {% include 'partial/svg/x.twig' %}
+    </span>
+  </button>
+</section>

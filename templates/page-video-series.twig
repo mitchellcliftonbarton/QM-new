@@ -1,0 +1,90 @@
+{% extends "base.twig" %}
+
+{% block content %}
+	<div class="page-wrap video-series push-nav">
+    <h1 class="wcag-hidden">Video Series</h1>
+
+    <div class="def-x py-20">
+      <div class="svg-section">
+        <div class="svg-wrapper"></div>
+
+        {% if categories_array|length > 0 %}
+          {% for item in categories_array %}
+            {% set showArchiveButton = false %}
+
+            {% if item.total > item.posts|length %}
+              {% set showArchiveButton = true %}
+            {% endif %}
+
+            <section 
+              id="{{ item.slug }}"
+              class="category-videos svg-group py-20 def-x-big lg:def-x scroll-to-section"
+            >
+              <h2 class="forma-h2 text-center mb-20">{{ item.title }}</h2>
+
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-def {% if showArchiveButton %}mb-16{% endif %}">
+                {% for video in item.posts %}
+                  <a href="{{ video.link }}" class="col-span-1">
+                    <div class="image relative mb-4">
+                      {% 
+                        include 'partial/image-sizer.twig' with {
+                          'image': Image(video.get_field('video_poster')),
+                          'ratioPaddingVal': 75
+                        }
+                      %}
+
+                      <div 
+                        class="play-video neon flex justify-center items-center rounded-xl w-16 h-16 forma-body absolute top-4 left-4 bg-forest-green"
+                        aria-label="Play video."
+                      >
+                        {% include 'partial/svg/play.twig' %}
+                      </div>
+                    </div>
+
+                    {% if post.get_field('series_title') %}
+                      <p class="forma-body">{{ post.get_field('series_title') }}</p>
+                    {% else %}
+                      <p class="forma-body">{{ post.title }}</p>
+                    {% endif %}
+                    
+                    {% if post.get_field('subtitle') %}
+                      <p class="forma-body">{{ post.get_field('subtitle') }}</p>
+                    {% endif %}
+                  </a>
+                {% endfor %}
+              </div>
+
+              {% if showArchiveButton %}
+                <div class="flex flex-wrap justify-center clear-both">
+                  <div class="w-full lg:w-1/2 lg:px-def-1/2 mb-def-1/2 lg:mb-def">
+                    {% 
+                      include 'partial/def-button.twig' with {
+                        'href': '/video-series/category/' ~ item.slug,
+                        'classes': 'w-full neon block',
+                        'label': "Go to" ~ item.title ~ " category.",
+                        'title': item.title ~ " Archive"
+                      }
+                    %}
+                  </div>
+                </div>
+              {% endif %}
+            </section>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="flex flex-wrap justify-center clear-both mt-20">
+        <div class="w-full lg:w-1/2 lg:px-def-1/2 mb-def-1/2 lg:mb-def">
+          {% 
+            include 'partial/def-button.twig' with {
+              'href': '/magazine',
+              'classes': 'w-full neon block hover-border',
+              'label': "Go to Magazine.",
+              'title': "Back to Magazine"
+            }
+          %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
