@@ -23,16 +23,27 @@
           aria-label="Intro section"
         >
           <div class="mb-16">
-            {% 
-              include 'partial/image-sizer.twig' with {
-                'classes': 'mb-def-1/2',
-                'image': Image(post.get_field('main_image')),
-                'loadBgClass': 'bg-grey'
+            {% set mainImage = Image(post.get_field('main_image')) %}
+            <style>
+              .staff-main-image { width: 100%; }
+              .staff-main-image img { width: 100%; height: auto; display: block; }
+              @media (min-width: 1024px) {
+                .staff-main-image { aspect-ratio: 16 / 6; overflow: hidden; background: none; }
+                .staff-main-image img { height: 100%; object-fit: contain; object-position: center; }
               }
-            %}
+            </style>
+            <div class="staff-main-image bg-grey mb-def-1/2">
+              <img
+                data-img="{{ mainImage.src }}"
+                alt="{{ mainImage.alt }}"
+                class="lazy-load"
+                width="{{ mainImage.width }}"
+                height="{{ mainImage.height }}"
+              >
+            </div>
 
             {% if post.get_field('main_image').caption %}
-              <p class="forma-caption">{{ post.get_field('main_image').caption }}</p>
+              {# <p class="forma-caption">{{ post.get_field('main_image').caption }}</p> #}
             {% endif %}
           </div>
 
